@@ -6,7 +6,44 @@
         xmlns:local="clr-namespace:Tour_Planner"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
+    <Grid Background="#F2F2F2">
+        <!-- Hamburger Menu -->
+        <StackPanel x:Name="hamburgerMenu" Background="#333333" Width="50" HorizontalAlignment="Left">
+            <Button Content="☰" FontSize="18" Foreground="White" Background="#333333" BorderBrush="#333333"
+                    Click="HamburgerMenu_Click"/>
+        </StackPanel>
 
+        <!-- Tour List -->
+        <ListBox x:Name="tourListBox" HorizontalAlignment="Left" VerticalAlignment="Top" Width="300" Height="400" 
+                 DisplayMemberPath="Name" SelectionChanged="TourListBox_SelectionChanged" Margin="60,20,0,0">
+            <!-- Dummy Tour Data -->
+            <local:Tour Name="Tour 1" Description="Tour Description 1" From="City A" To="City B" TransportType="Car"
+                        Distance="100 km" EstimatedTime="2 hours"/>
+            <local:Tour Name="Tour 2" Description="Tour Description 2" From="City C" To="City D" TransportType="Bike"
+                        Distance="50 km" EstimatedTime="1.5 hours"/>
+        </ListBox>
+
+        <!-- Tour Details -->
+        <StackPanel x:Name="tourDetailsPanel" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="380,20,0,0">
+            <!-- Display Tour Information -->
+            <TextBlock Text="Tour Details" FontWeight="Bold" FontSize="16"/>
+            <!-- Bind to Tour Properties -->
+
+            <!-- Tour Logs -->
+            <ListBox x:Name="tourLogsListBox" Height="150" DisplayMemberPath="DateTime" SelectionChanged="TourLogsListBox_SelectionChanged"/>
+            <!-- Dummy Tour Log Data -->
+            
+            
+            <!--<local:TourLog DateTime="2024-02-22 10:30" Comment="Enjoyed the tour!" Difficulty="Medium"
+                           TotalDistance="30 km" TotalTime="1.5 hours" Rating="4"/>
+            <local:TourLog DateTime="2024-02-23 09:45" Comment="Beautiful scenery!" Difficulty="Easy"
+                           TotalDistance="20 km" TotalTime="1 hour" Rating="5"/>-->
+
+            <!-- Add/Edit Tour Log -->
+            <Button Content="Add Tour Log" Click="AddTourLog_Click"/>
+
+            <!-- Display Tour Log Details -->
+            <!-- Bind to Tour Log Properties -->
+        </StackPanel>
     </Grid>
 </Window>
