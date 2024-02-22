@@ -7,43 +7,62 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid Background="#F2F2F2">
-        <!-- Hamburger Menu -->
-        <StackPanel x:Name="hamburgerMenu" Background="#333333" Width="50" HorizontalAlignment="Left">
-            <Button Content="☰" FontSize="18" Foreground="White" Background="#333333" BorderBrush="#333333"
-                    Click="HamburgerMenu_Click"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Navigation bar -->
+        <StackPanel x:Name="navigationBar" Background="#333333" Orientation="Horizontal" Grid.Row="0">
+            <TextBlock Foreground="White" Margin="10,10,10,10">Menu</TextBlock>
+            <TextBlock Foreground="White" Margin="125,10,100,10">Tours</TextBlock>
+            <TextBlock Foreground="White" Margin="250,10,10,10">Tour Details</TextBlock>
         </StackPanel>
 
-        <!-- Tour List -->
-        <ListBox x:Name="tourListBox" HorizontalAlignment="Left" VerticalAlignment="Top" Width="300" Height="400" 
-                 DisplayMemberPath="Name" SelectionChanged="TourListBox_SelectionChanged" Margin="60,20,0,0">
-            <!-- Dummy Tour Data -->
-            <local:Tour Name="Tour 1" Description="Tour Description 1" From="City A" To="City B" TransportType="Car"
-                        Distance="100 km" EstimatedTime="2 hours"/>
-            <local:Tour Name="Tour 2" Description="Tour Description 2" From="City C" To="City D" TransportType="Bike"
-                        Distance="50 km" EstimatedTime="1.5 hours"/>
-        </ListBox>
+        <!-- Content area -->
+        <Grid x:Name="contentGrid" Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="300"/>
+                <ColumnDefinition Width="450"/>
+            </Grid.ColumnDefinitions>
 
-        <!-- Tour Details -->
-        <StackPanel x:Name="tourDetailsPanel" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="380,20,0,0">
-            <!-- Display Tour Information -->
-            <TextBlock Text="Tour Details" FontWeight="Bold" FontSize="16"/>
-            <!-- Bind to Tour Properties -->
+            <!-- Hamburger Menu -->
+            <StackPanel x:Name="hamburgerMenu" Background="#333333" Width="50" HorizontalAlignment="Left">
+                <ToggleButton x:Name="hamburgerToggleButton" Content="☰" FontSize="18" Foreground="White" Background="#333333" BorderBrush="#333333" Checked="HamburgerMenu_Checked" Unchecked="HamburgerMenu_Unchecked"/>
+                <StackPanel x:Name="menuItemsPanel" Orientation="Vertical" Visibility="Collapsed">
+                    <TextBlock Foreground="White" Margin="5">ADD</TextBlock>
+                    <TextBlock Foreground="White" Margin="5">DELETE</TextBlock>
+                    <!-- Add more menu items as needed -->
+                </StackPanel>
+            </StackPanel>
 
-            <!-- Tour Logs -->
-            <ListBox x:Name="tourLogsListBox" Height="150" DisplayMemberPath="DateTime" SelectionChanged="TourLogsListBox_SelectionChanged"/>
-            <!-- Dummy Tour Log Data -->
-            
-            
-            <!--<local:TourLog DateTime="2024-02-22 10:30" Comment="Enjoyed the tour!" Difficulty="Medium"
-                           TotalDistance="30 km" TotalTime="1.5 hours" Rating="4"/>
-            <local:TourLog DateTime="2024-02-23 09:45" Comment="Beautiful scenery!" Difficulty="Easy"
-                           TotalDistance="20 km" TotalTime="1 hour" Rating="5"/>-->
+            <!-- Search Bar -->
+            <StackPanel x:Name="searchbar" Width="300" Grid.Column="1" Height="20" VerticalAlignment="Top" Margin="0,0,0,0">
+                <TextBox Text="Search ..." Height="23" />
+            </StackPanel>
 
-            <!-- Add/Edit Tour Log -->
-            <Button Content="Add Tour Log" Click="AddTourLog_Click"/>
+            <!-- Tour List -->
+            <ListBox x:Name="tourListBox" Width="300" DisplayMemberPath="Name" SelectionChanged="TourListBox_SelectionChanged" Padding="0,5,0,0" Grid.Column="1" Height="373" VerticalAlignment="Top" Margin="0,20,0,0">
+                <local:Tour Name="Tour 1"/>
+                <local:Tour Name="Tour 2"/>
+            </ListBox>
 
-            <!-- Display Tour Log Details -->
-            <!-- Bind to Tour Log Properties -->
-        </StackPanel>
+            <Grid x:Name="tourDetailsPanel" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Image Source="bin/test.jpg" Margin="0,5,11,210" Grid.RowSpan="2" HorizontalAlignment="Right" Width="440"/>
+                <DataGrid x:Name="tourLogsDataGrid" SelectionChanged="TourLogsListBox_SelectionChanged" AutoGenerateColumns="False" Margin="0,193,0,0" Grid.RowSpan="2">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Date" Binding="{Binding DateTime}" Width="150"/>
+                        <DataGridTextColumn Header="Duration" Binding="{Binding Duration}" Width="150"/>
+                        <DataGridTextColumn Header="Distance" Binding="{Binding Distance}" Width="150"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </Grid>
     </Grid>
 </Window>
