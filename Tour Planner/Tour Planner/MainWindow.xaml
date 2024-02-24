@@ -6,6 +6,9 @@
         xmlns:local="clr-namespace:Tour_Planner"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
+    <Window.DataContext>
+        <local:TourPlannerVM/>
+    </Window.DataContext>
     <Grid Background="#F2F2F2">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -33,7 +36,6 @@
                 <StackPanel x:Name="menuItemsPanel" Orientation="Vertical" Visibility="Collapsed">
                     <TextBlock Foreground="White" Margin="5">ADD</TextBlock>
                     <TextBlock Foreground="White" Margin="5">DELETE</TextBlock>
-                    <!-- Add more menu items as needed -->
                 </StackPanel>
             </StackPanel>
 
@@ -43,10 +45,7 @@
             </StackPanel>
 
             <!-- Tour List -->
-            <ListBox x:Name="tourListBox" Width="300" DisplayMemberPath="Name" SelectionChanged="TourListBox_SelectionChanged" Padding="0,5,0,0" Grid.Column="1" Height="373" VerticalAlignment="Top" Margin="0,20,0,0">
-                <local:Tour Name="Tour 1"/>
-                <local:Tour Name="Tour 2"/>
-            </ListBox>
+            <ListBox x:Name="tourListBox" ItemsSource="{Binding Tours}" Width="300" DisplayMemberPath="Name" SelectionChanged="TourListBox_SelectionChanged" Padding="0,5,0,0" Grid.Column="1" Height="373" VerticalAlignment="Top" Margin="0,20,0,0" />
 
             <Grid x:Name="tourDetailsPanel" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="2">
                 <Grid.RowDefinitions>
@@ -54,7 +53,10 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
+                <!-- Google Maps ding -->
                 <Image Source="bin/test.jpg" Margin="0,5,11,210" Grid.RowSpan="2" HorizontalAlignment="Right" Width="440"/>
+                
+                <!-- All Tour Logs -->
                 <DataGrid x:Name="tourLogsDataGrid" SelectionChanged="TourLogsListBox_SelectionChanged" AutoGenerateColumns="False" Margin="0,193,0,0" Grid.RowSpan="2">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Date" Binding="{Binding DateTime}" Width="150"/>
