@@ -31,13 +31,40 @@
             </Grid.ColumnDefinitions>
 
             <!-- Hamburger Menu -->
-            <StackPanel x:Name="hamburgerMenu" Background="#333333" Width="50" HorizontalAlignment="Left">
+            <StackPanel x:Name="hamburgerMenu"  Width="Auto" Background="#333333" MinWidth="50" HorizontalAlignment="Left">
                 <ToggleButton x:Name="hamburgerToggleButton" Content="☰" FontSize="18" Foreground="White" Background="#333333" BorderBrush="#333333" Checked="HamburgerMenu_Checked" Unchecked="HamburgerMenu_Unchecked"/>
                 <StackPanel x:Name="menuItemsPanel" Orientation="Vertical" Visibility="Collapsed">
-                    <TextBlock Foreground="White" Margin="5">ADD</TextBlock>
-                    <TextBlock Foreground="White" Margin="5">DELETE</TextBlock>
+                    <TextBlock Foreground="White" Margin="5">Tours:</TextBlock>
+                    <Button Click="AddButton_Click" Background="#333333" Margin="5">
+                        <Image Source="/add.png" Width="16" Height="16"/>
+                    </Button>
+                    <Button Click="DeleteButton_Click" Background="#333333" Margin="5">
+                        <Image Source="/delete.png" Width="16" Height="16"/>
+                    </Button>
+                    <Button Click="UpdateButton_Click" Background="#333333" Margin="5">
+                        <Image Source="/update.png" Width="16" Height="16"/>
+                    </Button>
+                    <TextBlock Foreground="White" Margin="5">Logs:</TextBlock>
+                    <Button Click="AddLogsButton_Click" Background="#333333" Margin="5">
+                        <Image Source="/add.png" Width="16" Height="16"/>
+                    </Button>
+                    <Button Click="DeleteLogsButton_Click" Background="#333333" Margin="5">
+                        <Image Source="/delete.png" Width="16" Height="16"/>
+                    </Button>
+                    <Button Click="UpdateLogsButton_Click" Background="#333333" Margin="5">
+                        <Image Source="/update.png" Width="16" Height="16"/>
+                    </Button>
+                    <TextBlock Foreground="White" Margin="15"></TextBlock>
+                    <Button Click="ImportButton_Click" Background="#333333" Margin="5">
+                        <Image Source="/import.png" Width="16" Height="16"/>
+                    </Button>
+                    <Button Click="ExportButton_Click" Background="#333333" Margin="5">
+                        <Image Source="/export.png" Width="16" Height="16"/>
+                    </Button>
                 </StackPanel>
             </StackPanel>
+
+
 
             <!-- Search Bar -->
             <StackPanel x:Name="searchbar" Width="300" Grid.Column="1" Height="20" VerticalAlignment="Top" Margin="0,0,0,0">
@@ -54,8 +81,8 @@
                 </Grid.RowDefinitions>
 
                 <!-- Google Maps ding -->
-                <Image Source="bin/test.jpg" Margin="0,5,11,210" Grid.RowSpan="2" HorizontalAlignment="Right" Width="440"/>
-                
+                <Image Source="/test.jpg" Margin="0,5,23,210" Grid.RowSpan="2" HorizontalAlignment="Right" Width="440"/>
+
                 <!-- All Tour Logs -->
                 <DataGrid x:Name="tourLogsDataGrid" SelectionChanged="TourLogsListBox_SelectionChanged" AutoGenerateColumns="False" Margin="0,193,0,0" Grid.RowSpan="2">
                     <DataGrid.Columns>

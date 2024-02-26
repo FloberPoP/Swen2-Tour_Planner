@@ -38,6 +38,7 @@ namespace Tour_Planner
 
         }
 
+        #region Menu
         private void HamburgerMenu_Checked(object sender, RoutedEventArgs e)
         {
             menuItemsPanel.Visibility = Visibility.Visible;
@@ -47,5 +48,46 @@ namespace Tour_Planner
         {
             menuItemsPanel.Visibility = Visibility.Collapsed;
         }
+
+        private void AddButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        private void UpdateButton_Click(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        private void AddLogsButton_Click(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        private void DeleteLogsButton_Click(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        private void UpdateLogsButton_Click(object sender, RoutedEventArgs e)
+        {
+           
+        }
+
+        private void ExportButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ImportButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+        #endregion
     }
 }
