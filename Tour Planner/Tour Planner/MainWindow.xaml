@@ -9,89 +9,135 @@
     <Window.DataContext>
         <local:TourPlannerVM/>
     </Window.DataContext>
-    <Grid Background="#F2F2F2">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+    <Grid>
+        <TabControl>
+            <TabItem Header="Home">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="4*"/>
+                        <RowDefinition Height="4*"/>
+                    </Grid.RowDefinitions>
 
-        <!-- Navigation bar -->
-        <StackPanel x:Name="navigationBar" Background="#333333" Orientation="Horizontal" Grid.Row="0">
-            <TextBlock Foreground="White" Margin="10,10,10,10">Menu</TextBlock>
-            <TextBlock Foreground="White" Margin="125,10,100,10">Tours</TextBlock>
-            <TextBlock Foreground="White" Margin="250,10,10,10">Tour Details</TextBlock>
-        </StackPanel>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="0.6*"/>
+                        <ColumnDefinition Width="4*"/>
+                        <ColumnDefinition Width="4*"/>
+                    </Grid.ColumnDefinitions>
 
-        <!-- Content area -->
-        <Grid x:Name="contentGrid" Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="50"/>
-                <ColumnDefinition Width="300"/>
-                <ColumnDefinition Width="450"/>
-            </Grid.ColumnDefinitions>
+                    <!-- Navigation bar -->
+                    <Label Content="Menu" Foreground="White" Background="#333" Grid.Row="0" Grid.Column="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                    <Label Content="Tours" Foreground="White" Background="#333" Grid.Row="0" Grid.Column="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                    <Label Content="Tour Details" Foreground="White" Background="#333" Grid.Row="0" Grid.Column="2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
 
-            <!-- Hamburger Menu -->
-            <StackPanel x:Name="hamburgerMenu"  Width="Auto" Background="#333333" MinWidth="50" HorizontalAlignment="Left">
-                <ToggleButton x:Name="hamburgerToggleButton" Content="☰" FontSize="18" Foreground="White" Background="#333333" BorderBrush="#333333" Checked="HamburgerMenu_Checked" Unchecked="HamburgerMenu_Unchecked"/>
-                <StackPanel x:Name="menuItemsPanel" Orientation="Vertical" Visibility="Collapsed">
-                    <TextBlock Foreground="White" Margin="5">Tours:</TextBlock>
-                    <Button Click="AddButton_Click" Background="#333333" Margin="5">
-                        <Image Source="/add.png" Width="16" Height="16"/>
-                    </Button>
-                    <Button Click="DeleteButton_Click" Background="#333333" Margin="5">
-                        <Image Source="/delete.png" Width="16" Height="16"/>
-                    </Button>
-                    <Button Click="UpdateButton_Click" Background="#333333" Margin="5">
-                        <Image Source="/update.png" Width="16" Height="16"/>
-                    </Button>
-                    <TextBlock Foreground="White" Margin="5">Logs:</TextBlock>
-                    <Button Click="AddLogsButton_Click" Background="#333333" Margin="5">
-                        <Image Source="/add.png" Width="16" Height="16"/>
-                    </Button>
-                    <Button Click="DeleteLogsButton_Click" Background="#333333" Margin="5">
-                        <Image Source="/delete.png" Width="16" Height="16"/>
-                    </Button>
-                    <Button Click="UpdateLogsButton_Click" Background="#333333" Margin="5">
-                        <Image Source="/update.png" Width="16" Height="16"/>
-                    </Button>
-                    <TextBlock Foreground="White" Margin="15"></TextBlock>
-                    <Button Click="ImportButton_Click" Background="#333333" Margin="5">
-                        <Image Source="/import.png" Width="16" Height="16"/>
-                    </Button>
-                    <Button Click="ExportButton_Click" Background="#333333" Margin="5">
-                        <Image Source="/export.png" Width="16" Height="16"/>
-                    </Button>
-                </StackPanel>
-            </StackPanel>
+                    <!-- Hamburger Menu -->
+                    <StackPanel x:Name="hamburgerMenu" Background="#333333" Grid.Column="0" Grid.Row="1" Grid.RowSpan="3">
+                        <ToggleButton x:Name="hamburgerToggleButton" Content="☰" FontSize="18" Foreground="White" Background="#333333" BorderBrush="#333333" Checked="HamburgerMenu_Checked" Unchecked="HamburgerMenu_Unchecked"/>
+                        <StackPanel x:Name="menuItemsPanel" Orientation="Vertical" Visibility="Collapsed">
+                            <TextBlock Foreground="White" Margin="5">Tours:</TextBlock>
+                            <Button Click="AddTour_Click" Background="#333333" Margin="5">
+                                <Image Source="/Images/add.png" Width="16" Height="16"/>
+                            </Button>
+                            <Button Click="DeleteTour_Click" Background="#333333" Margin="5">
+                                <Image Source="/Images/delete.png" Width="16" Height="16"/>
+                            </Button>
+                            <Button Click="UpdateTour_Click" Background="#333333" Margin="5">
+                                <Image Source="/Images/update.png" Width="16" Height="16"/>
+                            </Button>
+                            <TextBlock Foreground="White" Margin="5">Logs:</TextBlock>
+                            <Button Click="AddLogsButton_Click" Background="#333333" Margin="5">
+                                <Image Source="/Images/add.png" Width="16" Height="16"/>
+                            </Button>
+                            <Button Click="DeleteLogsButton_Click" Background="#333333" Margin="5">
+                                <Image Source="/Images/delete.png" Width="16" Height="16"/>
+                            </Button>
+                            <Button Click="UpdateLogsButton_Click" Background="#333333" Margin="5">
+                                <Image Source="/Images/update.png" Width="16" Height="16"/>
+                            </Button>
+                            <TextBlock Foreground="White" Margin="15"></TextBlock>
+                            <Button Click="ImportButton_Click" Background="#333333" Margin="5">
+                                <Image Source="/Images/import.png" Width="16" Height="16"/>
+                            </Button>
+                            <Button Click="ExportButton_Click" Background="#333333" Margin="5">
+                                <Image Source="/Images/export.png" Width="16" Height="16"/>
+                            </Button>
+                        </StackPanel>
+                    </StackPanel>
 
+                    <!-- Searchbar -->
+                    <TextBox Grid.Row="1" Grid.Column="1" Text="Search ..."/>
 
+                    <!-- Tour List -->
+                    <ListBox x:Name="tourListBox" ItemsSource="{Binding Tours}" DisplayMemberPath="Name" Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" SelectionChanged="TourListBox_SelectionChanged" VerticalAlignment="Top" Padding="0,5,0,0" Margin="0,20,0,0"/>
 
-            <!-- Search Bar -->
-            <StackPanel x:Name="searchbar" Width="300" Grid.Column="1" Height="20" VerticalAlignment="Top" Margin="0,0,0,0">
-                <TextBox Text="Search ..." Height="23" />
-            </StackPanel>
+                    <!-- Google Maps ding -->
+                    <Image Source="/Images/test.jpg" Grid.Row="1" Grid.Column="3" />
 
-            <!-- Tour List -->
-            <ListBox x:Name="tourListBox" ItemsSource="{Binding Tours}" Width="300" DisplayMemberPath="Name" SelectionChanged="TourListBox_SelectionChanged" Padding="0,5,0,0" Grid.Column="1" Height="373" VerticalAlignment="Top" Margin="0,20,0,0" />
+                    <!-- All Tour Logs -->
+                    <DataGrid x:Name="tourLogsDataGrid" Grid.Row="3" Grid.Column="3" SelectionChanged="TourLogsListBox_SelectionChanged" AutoGenerateColumns="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Date" Binding="{Binding DateTime}" Width="150"/>
+                            <DataGridTextColumn Header="Duration" Binding="{Binding Duration}" Width="150"/>
+                            <DataGridTextColumn Header="Distance" Binding="{Binding Distance}" Width="150"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+            
+            <TabItem Header="AddTour">
+                <Grid Background="#333">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="6*"/>
+                        <RowDefinition Height="1*"/>
+                    </Grid.RowDefinitions>
 
-            <Grid x:Name="tourDetailsPanel" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="2">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
+                    <Label Grid.Row="0" Foreground="White" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">Add New Tour</Label>
 
-                <!-- Google Maps ding -->
-                <Image Source="/test.jpg" Margin="0,5,23,210" Grid.RowSpan="2" HorizontalAlignment="Right" Width="440"/>
+                    <Grid Grid.Row="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
 
-                <!-- All Tour Logs -->
-                <DataGrid x:Name="tourLogsDataGrid" SelectionChanged="TourLogsListBox_SelectionChanged" AutoGenerateColumns="False" Margin="0,193,0,0" Grid.RowSpan="2">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Date" Binding="{Binding DateTime}" Width="150"/>
-                        <DataGridTextColumn Header="Duration" Binding="{Binding Duration}" Width="150"/>
-                        <DataGridTextColumn Header="Distance" Binding="{Binding Distance}" Width="150"/>
-                    </DataGrid.Columns>
-                </DataGrid>
-            </Grid>
-        </Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="4*"/>
+                            <ColumnDefinition Width="2*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <ListBox Grid.Row="0" Grid.Column="2" Grid.RowSpan="7" ItemsSource="{Binding Tours}" DisplayMemberPath="Name"/>
+
+                        <Label Grid.Row="0" Grid.Column="0" Foreground="White">Name:</Label>
+                        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding NewTourName}"/>
+
+                        <Label Grid.Row="1" Grid.Column="0" Foreground="White">Description:</Label>
+                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding NewTourDescr}"/>
+
+                        <Label Grid.Row="2" Grid.Column="0" Foreground="White">From:</Label>
+                        <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding NewTourFrom}"/>
+
+                        <Label Grid.Row="3" Grid.Column="0" Foreground="White">To:</Label>
+                        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding NewTourTo}"/>
+
+                        <Label Grid.Row="4" Grid.Column="0" Foreground="White">Transport Type:</Label>
+                        <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding NewTourTransType}"/>
+
+                        <Label Grid.Row="5" Grid.Column="0" Foreground="White">Distance:</Label>
+                        <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding NewTourDistance}"/>
+
+                        <Label Grid.Row="6" Grid.Column="0" Foreground="White">Estimated Time:</Label>
+                        <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding NewTourEstTime}"/>
+                    </Grid>
+
+                    <Button Content="Add Tour" Command="{Binding AddTourCommand}" Grid.Row="2"/>
+                </Grid>
+            </TabItem>
+        </TabControl>               
     </Grid>
 </Window>

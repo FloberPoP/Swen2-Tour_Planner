@@ -49,17 +49,17 @@ namespace Tour_Planner
             menuItemsPanel.Visibility = Visibility.Collapsed;
         }
 
-        private void AddButton_Click(object sender, RoutedEventArgs e)
+        private void AddTour_Click(object sender, RoutedEventArgs e)
         {
 
         }
 
-        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        private void DeleteTour_Click(object sender, RoutedEventArgs e)
         {
             
         }
 
-        private void UpdateButton_Click(object sender, RoutedEventArgs e)
+        private void UpdateTour_Click(object sender, RoutedEventArgs e)
         {
             
         }

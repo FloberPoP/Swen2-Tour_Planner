@@ -19,12 +19,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="add.png" />
-    <Resource Include="delete.png" />
-    <Resource Include="export.png" />
-    <Resource Include="import.png" />
-    <Resource Include="test.jpg" />
-    <Resource Include="update.png" />
+    <Resource Include="Images\add.png" />
+    <Resource Include="Images\delete.png" />
+    <Resource Include="Images\export.png" />
+    <Resource Include="Images\import.png" />
+    <Resource Include="Images\test.jpg" />
+    <Resource Include="Images\update.png" />
   </ItemGroup>
 
 </Project>
