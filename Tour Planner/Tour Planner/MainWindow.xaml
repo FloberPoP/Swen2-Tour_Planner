@@ -68,7 +68,7 @@
                     <TextBox Grid.Row="1" Grid.Column="1" Text="Search ..."/>
 
                     <!-- Tour List -->
-                    <ListBox x:Name="tourListBox" ItemsSource="{Binding Tours}" DisplayMemberPath="Name" Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" SelectionChanged="TourListBox_SelectionChanged" VerticalAlignment="Top" Padding="0,5,0,0" Margin="0,20,0,0"/>
+                    <ListBox x:Name="tourListBox" ItemsSource="{Binding Tours}" DisplayMemberPath="Name" Grid.Row="1" Grid.RowSpan="2" SelectionChanged="TourListBox_SelectionChanged" Padding="0,5,0,0" Margin="0,20,369,0" Grid.ColumnSpan="3" HorizontalAlignment="Right" Width="370"/>
 
                     <!-- Google Maps ding -->
                     <Image Source="/Images/test.jpg" Grid.Row="1" Grid.Column="3" />
@@ -83,7 +83,7 @@
                     </DataGrid>
                 </Grid>
             </TabItem>
-            
+
             <TabItem Header="AddTour">
                 <Grid Background="#333">
                     <Grid.RowDefinitions>
@@ -138,6 +138,6 @@
                     <Button Content="Add Tour" Command="{Binding AddTourCommand}" Grid.Row="2"/>
                 </Grid>
             </TabItem>
-        </TabControl>               
+        </TabControl>
     </Grid>
 </Window>
