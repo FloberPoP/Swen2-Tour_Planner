@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Tour_Planner"
+        xmlns:app="clr-namespace:Tour_Planner"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Window.DataContext>
@@ -65,10 +66,10 @@
                     </StackPanel>
 
                     <!-- Searchbar -->
-                    <TextBox Grid.Row="1" Grid.Column="1" Text="Search ..."/>
+                    <TextBox Text="Search ..." Grid.ColumnSpan="3" Margin="55,45,369,0" Grid.RowSpan="2" Height="20" VerticalAlignment="Top"/>
 
                     <!-- Tour List -->
-                    <ListBox x:Name="tourListBox" ItemsSource="{Binding Tours}" DisplayMemberPath="Name" Grid.Row="1" Grid.RowSpan="2" SelectionChanged="TourListBox_SelectionChanged" Padding="0,5,0,0" Margin="0,20,369,0" Grid.ColumnSpan="3" HorizontalAlignment="Right" Width="370"/>
+                    <ListBox x:Name="tourListBox" ItemsSource="{Binding Tours}" DisplayMemberPath="Name" Grid.Row="1" Grid.RowSpan="2" SelectionChanged="TourListBox_SelectionChanged" Padding="0,5,0,0" Margin="55,20,369,0" Grid.ColumnSpan="3"/>
 
                     <!-- Google Maps ding -->
                     <Image Source="/Images/test.jpg" Grid.Row="1" Grid.Column="3" />
@@ -85,58 +86,7 @@
             </TabItem>
 
             <TabItem Header="AddTour">
-                <Grid Background="#333">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="6*"/>
-                        <RowDefinition Height="1*"/>
-                    </Grid.RowDefinitions>
-
-                    <Label Grid.Row="0" Foreground="White" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">Add New Tour</Label>
-
-                    <Grid Grid.Row="1">
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="4*"/>
-                            <ColumnDefinition Width="2*"/>
-                        </Grid.ColumnDefinitions>
-
-                        <ListBox Grid.Row="0" Grid.Column="2" Grid.RowSpan="7" ItemsSource="{Binding Tours}" DisplayMemberPath="Name"/>
-
-                        <Label Grid.Row="0" Grid.Column="0" Foreground="White">Name:</Label>
-                        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding NewTourName}"/>
-
-                        <Label Grid.Row="1" Grid.Column="0" Foreground="White">Description:</Label>
-                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding NewTourDescr}"/>
-
-                        <Label Grid.Row="2" Grid.Column="0" Foreground="White">From:</Label>
-                        <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding NewTourFrom}"/>
-
-                        <Label Grid.Row="3" Grid.Column="0" Foreground="White">To:</Label>
-                        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding NewTourTo}"/>
-
-                        <Label Grid.Row="4" Grid.Column="0" Foreground="White">Transport Type:</Label>
-                        <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding NewTourTransType}"/>
-
-                        <Label Grid.Row="5" Grid.Column="0" Foreground="White">Distance:</Label>
-                        <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding NewTourDistance}"/>
-
-                        <Label Grid.Row="6" Grid.Column="0" Foreground="White">Estimated Time:</Label>
-                        <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding NewTourEstTime}"/>
-                    </Grid>
-
-                    <Button Content="Add Tour" Command="{Binding AddTourCommand}" Grid.Row="2"/>
-                </Grid>
+                <app:AddTours/>
             </TabItem>
         </TabControl>
     </Grid>
