@@ -53,6 +53,8 @@
 
             <Label Grid.Row="6" Grid.Column="0" Foreground="White">Estimated Time:</Label>
             <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding NewTourEstTime}"/>
+
+            <!-- Route information (IMG) -->
         </Grid>
 
         <Button Content="Add Tour" Command="{Binding AddTourCommand}" Grid.Row="2"/>

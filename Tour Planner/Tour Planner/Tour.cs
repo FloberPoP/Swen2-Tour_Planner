@@ -1,13 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
 
 namespace Tour_Planner
 {
-    public class Tour
+    public class Tour : INotifyPropertyChanged
     {
+        private ObservableCollection<TourLog> tourLogs = new ObservableCollection<TourLog>();
+
+        public ObservableCollection<TourLog> TourLogs
+        {
+            get { return tourLogs; }
+            set
+            {
+                tourLogs = value;
+                OnPropertyChanged(nameof(TourLogs));
+            }
+        }
+
         public string Name { get; set; }
         public string Description { get; set; }
         public string From { get; set; }
@@ -15,5 +24,12 @@ namespace Tour_Planner
         public string TransportType { get; set; }
         public int Distance { get; set; }
         public int EstimatedTime { get; set; }
+        public string Img { get; set; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

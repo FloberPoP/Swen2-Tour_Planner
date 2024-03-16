@@ -11,11 +11,12 @@
         <local:TourPlannerVM/>
     </Window.DataContext>
     <Grid>
-        <TabControl>
+        <TabControl Grid.ColumnSpan="2">
             <TabItem Header="Home">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="1*"/>
+                        <RowDefinition Height="0.6*"/>
                         <RowDefinition Height="4*"/>
                         <RowDefinition Height="4*"/>
                     </Grid.RowDefinitions>
@@ -27,12 +28,16 @@
                     </Grid.ColumnDefinitions>
 
                     <!-- Navigation bar -->
-                    <Label Content="Menu" Foreground="White" Background="#333" Grid.Row="0" Grid.Column="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-                    <Label Content="Tours" Foreground="White" Background="#333" Grid.Row="0" Grid.Column="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-                    <Label Content="Tour Details" Foreground="White" Background="#333" Grid.Row="0" Grid.Column="2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                    <StackPanel Background="#333333" Grid.Column="0" Grid.Row="0" Grid.RowSpan="1" Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Stretch">
+                        <TextBlock Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10 0 190 0">Menu</TextBlock>
+                        <TextBlock Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center">Tours</TextBlock>
+                        <TextBlock Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="310 0 0 0">Tour Details</TextBlock>
+                    </StackPanel>
+
+
 
                     <!-- Hamburger Menu -->
-                    <StackPanel x:Name="hamburgerMenu" Background="#333333" Grid.Column="0" Grid.Row="1" Grid.RowSpan="3">
+                    <StackPanel x:Name="hamburgerMenu" Background="#333333" Grid.Column="0" Grid.Row="1" Grid.RowSpan="4" Grid.ColumnSpan="1">
                         <ToggleButton x:Name="hamburgerToggleButton" Content="☰" FontSize="18" Foreground="White" Background="#333333" BorderBrush="#333333" Checked="HamburgerMenu_Checked" Unchecked="HamburgerMenu_Unchecked"/>
                         <StackPanel x:Name="menuItemsPanel" Orientation="Vertical" Visibility="Collapsed">
                             <TextBlock Foreground="White" Margin="5">Tours:</TextBlock>
@@ -66,27 +71,34 @@
                     </StackPanel>
 
                     <!-- Searchbar -->
-                    <TextBox Text="Search ..." Grid.ColumnSpan="3" Margin="55,45,369,0" Grid.RowSpan="2" Height="20" VerticalAlignment="Top"/>
+                    <TextBox Text="Search ..." Grid.Column="1" Grid.Row="1" Grid.RowSpan="1" Grid.ColumnSpan="2"  Height="20" VerticalAlignment="Center"/>
 
                     <!-- Tour List -->
-                    <ListBox x:Name="tourListBox" ItemsSource="{Binding Tours}" DisplayMemberPath="Name" Grid.Row="1" Grid.RowSpan="2" SelectionChanged="TourListBox_SelectionChanged" Padding="0,5,0,0" Margin="55,20,369,0" Grid.ColumnSpan="3"/>
+                    <ListBox x:Name="tourListBox" ItemsSource="{Binding Tours}" DisplayMemberPath="Name" Grid.Column="1" Grid.Row="2" Grid.RowSpan="1" Grid.ColumnSpan="1" SelectionChanged="TourListBox_SelectionChanged" Padding="0,5,0,0"/>
 
                     <!-- Google Maps ding -->
-                    <Image Source="/Images/test.jpg" Grid.Row="1" Grid.Column="3" />
+                    <Image Source="/Images/test.jpg" Grid.Row="2" Grid.RowSpan="1" Grid.Column="2" Grid.ColumnSpan="1"/>
 
                     <!-- All Tour Logs -->
-                    <DataGrid x:Name="tourLogsDataGrid" Grid.Row="3" Grid.Column="3" SelectionChanged="TourLogsListBox_SelectionChanged" AutoGenerateColumns="False">
+                    <DataGrid x:Name="tourLogsDataGrid" Grid.Row="3" Grid.Column="1" Grid.RowSpan="1" Grid.ColumnSpan="3" AutoGenerateColumns="False" ItemsSource="{Binding SelectedTour.TourLogs}">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Date" Binding="{Binding DateTime}" Width="150"/>
-                            <DataGridTextColumn Header="Duration" Binding="{Binding Duration}" Width="150"/>
-                            <DataGridTextColumn Header="Distance" Binding="{Binding Distance}" Width="150"/>
+                            <DataGridTextColumn Header="Date" Binding="{Binding NewDateTime}" Width="*" />
+                            <DataGridTextColumn Header="Comment" Binding="{Binding NewComment}" Width="*" />
+                            <DataGridTextColumn Header="Difficulty" Binding="{Binding NewDifficulty}" Width="*" />
+                            <DataGridTextColumn Header="Total Distance" Binding="{Binding NewTotalDistance}" Width="*" />
+                            <DataGridTextColumn Header="Total Time" Binding="{Binding NewTotalTime}" Width="*" />
+                            <DataGridTextColumn Header="Rating" Binding="{Binding NewRating}" Width="*" />
                         </DataGrid.Columns>
                     </DataGrid>
+
                 </Grid>
             </TabItem>
 
             <TabItem Header="AddTour">
                 <app:AddTours/>
+            </TabItem>
+            <TabItem Header="AddTourLogs">
+                <app:AddTourLogs/>
             </TabItem>
         </TabControl>
     </Grid>

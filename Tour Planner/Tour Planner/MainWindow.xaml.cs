@@ -20,19 +20,21 @@ namespace Tour_Planner
         public MainWindow()
         {
             InitializeComponent();
-
-            tourLogsDataGrid.ItemsSource = new List<TourLog>
-            {
-                new TourLog { DateTime = DateTime.Now, Duration = "2 hours", Distance = "10 km" },
-                new TourLog { DateTime = DateTime.Now.AddDays(-1), Duration = "1.5 hours", Distance = "8 km" },
-            };
         }
 
-        private void TourListBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        private void TourListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (tourListBox.SelectedItem != null)
+            {
+                // Get the selected tour from the ListBox
+                Tour selectedTour = tourListBox.SelectedItem as Tour;
 
+                // Set the selected tour in the view model
+                (DataContext as TourPlannerVM).SelectedTour = selectedTour;
+            }
         }
-        
+
+
         private void TourLogsListBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
 
