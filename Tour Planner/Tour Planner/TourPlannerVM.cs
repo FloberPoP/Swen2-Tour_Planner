@@ -269,8 +269,11 @@ namespace Tour_Planner
 
             set
             {
-                newrating = value;
-                OnPropertyChanged();
+                if (int.TryParse(value.ToString(), out int intValue))
+                {
+                    newrating = intValue;
+                    OnPropertyChanged();
+                }
             }
         }
         public Tour TourLogsSelectedTour

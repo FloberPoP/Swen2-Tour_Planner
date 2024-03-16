@@ -82,14 +82,15 @@
                     <!-- All Tour Logs -->
                     <DataGrid x:Name="tourLogsDataGrid" Grid.Row="3" Grid.Column="1" Grid.RowSpan="1" Grid.ColumnSpan="3" AutoGenerateColumns="False" ItemsSource="{Binding SelectedTour.TourLogs}">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Date" Binding="{Binding NewDateTime}" Width="*" />
-                            <DataGridTextColumn Header="Comment" Binding="{Binding NewComment}" Width="*" />
-                            <DataGridTextColumn Header="Difficulty" Binding="{Binding NewDifficulty}" Width="*" />
-                            <DataGridTextColumn Header="Total Distance" Binding="{Binding NewTotalDistance}" Width="*" />
-                            <DataGridTextColumn Header="Total Time" Binding="{Binding NewTotalTime}" Width="*" />
-                            <DataGridTextColumn Header="Rating" Binding="{Binding NewRating}" Width="*" />
+                            <DataGridTextColumn Header="Date" Binding="{Binding DateTime}" Width="*" />
+                            <DataGridTextColumn Header="Comment" Binding="{Binding Comment}" Width="*" />
+                            <DataGridTextColumn Header="Difficulty" Binding="{Binding Difficulty}" Width="*" />
+                            <DataGridTextColumn Header="Total Distance" Binding="{Binding TotalDistance}" Width="*" />
+                            <DataGridTextColumn Header="Total Time" Binding="{Binding TotalTime}" Width="*" />
+                            <DataGridTextColumn Header="Rating" Binding="{Binding Rating}" Width="*" />
                         </DataGrid.Columns>
                     </DataGrid>
+
 
                 </Grid>
             </TabItem>
