@@ -16,7 +16,10 @@ namespace Tour_Planner
 
             AddTourCommand = new RelayCommand(o => AddTour());
             AddTourLogCommand = new RelayCommand(o => AddTourLog());
-            NewDateTime = DateTime.Now;
+            DeleteTourLogCommand = new RelayCommand(o => DeleteTourLog());
+            SaveTourLogCommand = new RelayCommand(o => SaveTourLog());
+
+            SelectedTourLog = new TourLog { DateTime= DateTime.Now };
         }
      
         public void AddTour()
@@ -35,21 +38,53 @@ namespace Tour_Planner
 
         public void AddTourLog()
         {
-            TourLog t = new TourLog();
-            t.tour = selectedTour;
-            t.DateTime = newdateTime;
-            t.Comment = newcomment;
-            t.Difficulty = newdifficulty;
-            t.TotalDistance = newtotalDistance;
-            t.TotalTime = newtotalTime;
-            t.Rating = newrating;
+            if(selectedTourLog != null)
+            {
+                TourLog t = selectedTourLog;
+                t.tour = selectedTour;
+                t.DateTime = newdateTime;
+                t.Comment = newcomment;
+                t.Difficulty = newdifficulty;
+                t.TotalDistance = newtotalDistance;
+                t.TotalTime = newtotalTime;
+                t.Rating = newrating;
 
-            if(TourLogsSelectedTour != null)
-                TourLogsSelectedTour.TourLogs.Add(t);
+                if (TourLogsSelectedTour != null)
+                    TourLogsSelectedTour.TourLogs.Add(t); 
+            }                                  
+        }
+
+        public void DeleteTourLog()
+        {
+            if (SelectedTourLog != null && TourLogsSelectedTour != null)
+            {
+                TourLogsSelectedTour.TourLogs.Remove(SelectedTourLog);
+                SelectedTourLog = null; // Clear the selection after deletion
+            }
+        }
+
+        public void SaveTourLog()
+        {
+            if (SelectedTourLog != null && TourLogsSelectedTour != null)
+            {
+                int index = TourLogsSelectedTour.TourLogs.IndexOf(SelectedTourLog);
+                if (index != -1)
+                {
+                    SelectedTourLog.DateTime = NewDateTime;
+                    SelectedTourLog.Comment = NewComment;
+                    SelectedTourLog.Difficulty = NewDifficulty;
+                    SelectedTourLog.TotalDistance = NewTotalDistance;
+                    SelectedTourLog.TotalTime = NewTotalTime;
+                    SelectedTourLog.Rating = NewRating;
+
+                    TourLogsSelectedTour.TourLogs[index] = SelectedTourLog;
+                }
+            }
         }
 
         private Tour tourLogsSelectedTour;
         private Tour selectedTour;
+        private TourLog selectedTourLog;
         private ObservableCollection<Tour> tours;
 
         public ObservableCollection<Tour> Tours
@@ -194,6 +229,8 @@ namespace Tour_Planner
         public int newrating { get; set; }
         
         public ICommand AddTourLogCommand { get; set; }
+        public ICommand DeleteTourLogCommand { get; set; }
+        public ICommand SaveTourLogCommand { get; set; }
 
         public DateTime NewDateTime
         {
@@ -287,6 +324,36 @@ namespace Tour_Planner
             {
                 tourLogsSelectedTour = value;
                 OnPropertyChanged();
+            }
+        }
+        public TourLog SelectedTourLog
+        {
+            get { return selectedTourLog; }
+            set
+            {
+                selectedTourLog = value;
+                OnPropertyChanged(nameof(SelectedTourLog));
+
+                // Update the NewXXX properties when SelectedTourLog changes
+                if (selectedTourLog != null)
+                {
+                    NewDateTime = selectedTourLog.DateTime;
+                    NewComment = selectedTourLog.Comment;
+                    NewDifficulty = selectedTourLog.Difficulty;
+                    NewTotalDistance = selectedTourLog.TotalDistance;
+                    NewTotalTime = selectedTourLog.TotalTime;
+                    NewRating = selectedTourLog.Rating;
+                }
+                else
+                {
+                    // Clear the NewXXX properties if no tour log is selected
+                    NewDateTime = DateTime.Now;
+                    NewComment = "";
+                    NewDifficulty = "";
+                    NewTotalDistance = "";
+                    NewTotalTime = "";
+                    NewRating = 0;
+                }
             }
         }
         #endregion
