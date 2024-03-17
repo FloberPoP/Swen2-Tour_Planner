@@ -17,7 +17,20 @@ namespace Tour_Planner
             }
         }
 
-        public string Name { get; set; }
+        public string Name
+        {
+            get { return name; }
+            set
+            {
+                if (name != value) 
+                {
+                    name = value;
+                    OnPropertyChanged(nameof(Name));
+                }
+            }
+        }
+
+        private string name { get; set; }
         public string Description { get; set; }
         public string From { get; set; }
         public string To { get; set; }

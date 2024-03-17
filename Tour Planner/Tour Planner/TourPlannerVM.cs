@@ -43,7 +43,6 @@ namespace Tour_Planner
         {
             if (SelectedTour != null)
             {
-
                 SelectedTour.Name = NewTourName;
                 SelectedTour.Description = NewTourDescr;
                 SelectedTour.From = NewTourFrom;

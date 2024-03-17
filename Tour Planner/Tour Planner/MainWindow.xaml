@@ -95,11 +95,11 @@
                 </Grid>
             </TabItem>
 
-            <TabItem Header="AddTour">
+            <TabItem Header="Tour">
                 <app:AddTours/>
             </TabItem>
             
-            <TabItem Header="AddTourLogs">
+            <TabItem Header="TourLogs">
                 <app:AddTourLogs/>
             </TabItem>
         </TabControl>
