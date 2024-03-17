@@ -19,7 +19,7 @@ namespace Tour_Planner
             DeleteTourLogCommand = new RelayCommand(o => DeleteTourLog());
             SaveTourLogCommand = new RelayCommand(o => SaveTourLog());
 
-            SelectedTourLog = new TourLog { DateTime= DateTime.Now };
+            NewDateTime = DateTime.Now;
         }
      
         public void AddTour()
@@ -38,31 +38,26 @@ namespace Tour_Planner
 
         public void AddTourLog()
         {
-            if(selectedTourLog != null)
-            {
-                TourLog t = selectedTourLog;
-                t.tour = selectedTour;
-                t.DateTime = newdateTime;
-                t.Comment = newcomment;
-                t.Difficulty = newdifficulty;
-                t.TotalDistance = newtotalDistance;
-                t.TotalTime = newtotalTime;
-                t.Rating = newrating;
+            TourLog t = new TourLog();
+            t.tour = selectedTour;
+            t.DateTime = newdateTime;
+            t.Comment = newcomment;
+            t.Difficulty = newdifficulty;
+            t.TotalDistance = newtotalDistance;
+            t.TotalTime = newtotalTime;
+            t.Rating = newrating;
 
-                if (TourLogsSelectedTour != null)
-                    TourLogsSelectedTour.TourLogs.Add(t); 
-            }                                  
+            if (TourLogsSelectedTour != null)
+                TourLogsSelectedTour.TourLogs.Add(t);                                 
         }
-
         public void DeleteTourLog()
         {
             if (SelectedTourLog != null && TourLogsSelectedTour != null)
             {
                 TourLogsSelectedTour.TourLogs.Remove(SelectedTourLog);
-                SelectedTourLog = null; // Clear the selection after deletion
+                SelectedTourLog = null;
             }
         }
-
         public void SaveTourLog()
         {
             if (SelectedTourLog != null && TourLogsSelectedTour != null)
@@ -334,7 +329,6 @@ namespace Tour_Planner
                 selectedTourLog = value;
                 OnPropertyChanged(nameof(SelectedTourLog));
 
-                // Update the NewXXX properties when SelectedTourLog changes
                 if (selectedTourLog != null)
                 {
                     NewDateTime = selectedTourLog.DateTime;
@@ -346,7 +340,6 @@ namespace Tour_Planner
                 }
                 else
                 {
-                    // Clear the NewXXX properties if no tour log is selected
                     NewDateTime = DateTime.Now;
                     NewComment = "";
                     NewDifficulty = "";

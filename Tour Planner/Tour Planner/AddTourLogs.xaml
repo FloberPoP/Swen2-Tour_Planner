@@ -38,22 +38,22 @@
             <ComboBox x:Name="TourComboBox" Grid.Row="0" Grid.Column="1" ItemsSource="{Binding Tours}"  DisplayMemberPath="Name" SelectedItem="{Binding TourLogsSelectedTour, Mode=TwoWay}"/>
 
             <Label Grid.Row="1" Grid.Column="0" Foreground="White">DateTime:</Label>
-            <xctk:DateTimePicker x:Name="DateTimePicker" Grid.Row="1" Grid.Column="1" Value="{Binding SelectedTourLog.DateTime, Mode=TwoWay}" Format="Custom" FormatString="dd/MM/yyyy HH:mm:ss"/>
+            <xctk:DateTimePicker x:Name="DateTimePicker" Grid.Row="1" Grid.Column="1" Value="{Binding NewDateTime, Mode=TwoWay}" Format="Custom" FormatString="dd/MM/yyyy HH:mm:ss"/>
 
             <Label Grid.Row="2" Grid.Column="0" Foreground="White">Comment:</Label>
-            <TextBox x:Name="CommentTextBox" Grid.Row="2" Grid.Column="1" Text="{Binding SelectedTourLog.Comment, Mode=TwoWay}"/>
+            <TextBox x:Name="CommentTextBox" Grid.Row="2" Grid.Column="1" Text="{Binding NewComment, Mode=TwoWay}"/>
 
             <Label Grid.Row="3" Grid.Column="0" Foreground="White">Difficulty:</Label>
-            <TextBox x:Name="DifficultyTextBox" Grid.Row="3" Grid.Column="1" Text="{Binding SelectedTourLog.Difficulty, Mode=TwoWay}"/>
+            <TextBox x:Name="DifficultyTextBox" Grid.Row="3" Grid.Column="1" Text="{Binding NewDifficulty, Mode=TwoWay}"/>
 
             <Label Grid.Row="4" Grid.Column="0" Foreground="White">Total Distance:</Label>
-            <TextBox x:Name="TotalDistanceTextBox" Grid.Row="4" Grid.Column="1" Text="{Binding SelectedTourLog.TotalDistance, Mode=TwoWay}"/>
+            <TextBox x:Name="TotalDistanceTextBox" Grid.Row="4" Grid.Column="1" Text="{Binding NewTotalDistance, Mode=TwoWay}"/>
 
             <Label Grid.Row="5" Grid.Column="0" Foreground="White">Total Time:</Label>
-            <TextBox x:Name="TotalTimeTextBox" Grid.Row="5" Grid.Column="1" Text="{Binding SelectedTourLog.TotalTime, Mode=TwoWay}"/>
+            <TextBox x:Name="TotalTimeTextBox" Grid.Row="5" Grid.Column="1" Text="{Binding NewTotalTime, Mode=TwoWay}"/>
 
             <Label Grid.Row="6" Grid.Column="0" Foreground="White">Rating:</Label>
-            <TextBox x:Name="RatingTextBox" Grid.Row="6" Grid.Column="1" Text="{Binding SelectedTourLog.Rating, Mode=TwoWay}"/>
+            <TextBox x:Name="RatingTextBox" Grid.Row="6" Grid.Column="1" Text="{Binding NewRating, Mode=TwoWay}"/>
 
         </Grid>
 
