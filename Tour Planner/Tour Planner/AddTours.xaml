@@ -31,7 +31,7 @@
                 <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
 
-            <ListBox Grid.Row="0" Grid.Column="2" Grid.RowSpan="7" ItemsSource="{Binding Tours}" DisplayMemberPath="Name"/>
+            <ListBox Grid.Row="0" Grid.Column="2" Grid.RowSpan="7" ItemsSource="{Binding Tours}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedTour, Mode=TwoWay}"/>
 
             <Label Grid.Row="0" Grid.Column="0" Foreground="White">Name:</Label>
             <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding NewTourName}"/>
@@ -57,6 +57,15 @@
             <!-- Route information (IMG) -->
         </Grid>
 
-        <Button Content="Add Tour" Command="{Binding AddTourCommand}" Grid.Row="2"/>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+            <Button Content="Add Tour" Command="{Binding AddTourCommand}" Grid.Column="0"/>
+            <Button Content="Update Tour" Command="{Binding UpdateTourCommand}"  Grid.Column="1"/>
+            <Button Content="Delete Tour" Command="{Binding DeleteTourCommand}"  Grid.Column="2"/>
+        </Grid>
     </Grid>
 </UserControl>

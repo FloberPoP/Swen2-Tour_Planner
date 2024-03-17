@@ -15,6 +15,9 @@ namespace Tour_Planner
             tours.Add(new Tour() { Name = "TourB", Description = "jklö", From = "B", To = "Y", TransportType = "UBahn", Distance = 2, EstimatedTime = 3 });
 
             AddTourCommand = new RelayCommand(o => AddTour());
+            UpdateTourCommand = new RelayCommand(o => UpdateTour());
+            DeleteTourCommand = new RelayCommand(o =>  DeleteTour());
+
             AddTourLogCommand = new RelayCommand(o => AddTourLog());
             DeleteTourLogCommand = new RelayCommand(o => DeleteTourLog());
             SaveTourLogCommand = new RelayCommand(o => SaveTourLog());
@@ -34,6 +37,30 @@ namespace Tour_Planner
             t.EstimatedTime = newTourEstTime;
 
             tours.Add(t);
+        }
+
+        public void UpdateTour()
+        {
+            if (SelectedTour != null)
+            {
+
+                SelectedTour.Name = NewTourName;
+                SelectedTour.Description = NewTourDescr;
+                SelectedTour.From = NewTourFrom;
+                SelectedTour.To = NewTourTo;
+                SelectedTour.TransportType = NewTourTransType;
+                SelectedTour.Distance = NewTourDistance;
+                SelectedTour.EstimatedTime = NewTourEstTime;
+            }
+        }
+
+        public void DeleteTour()
+        {
+            if (SelectedTour != null)
+            {
+                Tours.Remove(SelectedTour);
+                SelectedTour = null;
+            }
         }
 
         public void AddTourLog()
@@ -106,7 +133,8 @@ namespace Tour_Planner
         private int newTourEstTime { get; set; }
 
         public ICommand AddTourCommand { get; set; }
-        public ICommand RemoveTourCommand { get; set; }
+        public ICommand UpdateTourCommand { get; set; }
+        public ICommand DeleteTourCommand { get; set; }
 
         public Tour SelectedTour
         {
@@ -119,6 +147,28 @@ namespace Tour_Planner
             {
                 selectedTour = value;
                 OnPropertyChanged();
+
+                if (selectedTour != null)
+                {
+                    NewTourName = selectedTour.Name;
+                    NewTourDescr = selectedTour.Description;
+                    NewTourFrom = selectedTour.From;
+                    NewTourTo = selectedTour.To;
+                    NewTourTransType = selectedTour.TransportType;
+                    NewTourDistance = selectedTour.Distance;
+                    NewTourEstTime = selectedTour.EstimatedTime;
+                }
+
+                else
+                {
+                    NewTourName = "";
+                    NewTourDescr = "";
+                    NewTourFrom = "";
+                    NewTourTo = "";
+                    NewTourTransType = "";
+                    NewTourDistance = 0;
+                    NewTourEstTime = 0;
+                }
             }
         }
         public string NewTourName
@@ -213,7 +263,6 @@ namespace Tour_Planner
             }
         }
         #endregion
-
 
         #region TourLogs Data
         public DateTime newdateTime { get; set; }
