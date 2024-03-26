@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows7.0</TargetFramework>
     <RootNamespace>Tour_Planner</RootNamespace>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
@@ -20,6 +20,8 @@
 
   <ItemGroup>
     <PackageReference Include="Extended.Wpf.Toolkit" Version="4.6.0" />
+	  <PackageReference Include="MSTest.TestAdapter" Version="3.2.2" />
+	  <PackageReference Include="MSTest.TestFramework" Version="3.2.2" />
   </ItemGroup>
 
   <ItemGroup>
