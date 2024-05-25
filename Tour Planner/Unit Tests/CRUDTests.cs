@@ -1,4 +1,4 @@
-﻿using Tour_Planner;
+﻿using Tour_Planner.Models;
 using Tour_Planner.ViewModels;
 
 namespace UnitTests
@@ -64,7 +64,7 @@ namespace UnitTests
         public void UpdateTourLog()
         {
             var selectedTour = new Tour { Name = "TestTour" };
-            var selectedTourLog = new TourLog { tour = selectedTour, DateTime = DateTime.Now, Comment = "TestComment" };
+            var selectedTourLog = new TourLog { Tour = selectedTour, DateTime = DateTime.Now, Comment = "TestComment" };
             tourPlannerVM.TourLogsSelectedTour = selectedTour;
             tourPlannerVM.SelectedTourLog = selectedTourLog;
 
@@ -78,7 +78,7 @@ namespace UnitTests
         public void DeleteTourLog()
         {
             var selectedTour = new Tour { Name = "TestTour" };
-            var tourLogToDelete = new TourLog { tour = selectedTour, DateTime = DateTime.Now, Comment = "TestComment" };
+            var tourLogToDelete = new TourLog { Tour = selectedTour, DateTime = DateTime.Now, Comment = "TestComment" };
             tourPlannerVM.TourLogsSelectedTour = selectedTour;
             tourPlannerVM.SelectedTourLog = tourLogToDelete;
             tourPlannerVM.AddTourLog();

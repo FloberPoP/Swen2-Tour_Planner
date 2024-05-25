@@ -1,26 +1,20 @@
-﻿using System.Text;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Tour_Planner.Models;
 using Tour_Planner.ViewModels;
+using log4net.Config;
+using log4net;
 
 namespace Tour_Planner
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
-        //Initialize your tour data and set DataContext
+        private static readonly ILog Log = LogManager.GetLogger(typeof(App));
+
         public MainWindow()
         {
+            XmlConfigurator.Configure();
+            Log.Info("Application starting...");
             InitializeComponent();
         }
 
@@ -28,10 +22,7 @@ namespace Tour_Planner
         {
             if (tourListBox.SelectedItem != null)
             {
-                // Get the selected tour from the ListBox
                 Tour selectedTour = tourListBox.SelectedItem as Tour;
-
-                // Set the selected tour in the view model
                 (DataContext as TourPlannerVM).SelectedTour = selectedTour;
             }
         }

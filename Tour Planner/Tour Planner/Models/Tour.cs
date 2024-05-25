@@ -5,7 +5,12 @@ namespace Tour_Planner.Models
 {
     public class Tour : INotifyPropertyChanged
     {
-        private ObservableCollection<TourLog> tourLogs = new ObservableCollection<TourLog>();
+        private ObservableCollection<TourLog> tourLogs;
+
+        public Tour()
+        {
+            tourLogs = new ObservableCollection<TourLog>();
+        }
 
         public ObservableCollection<TourLog> TourLogs
         {
@@ -17,6 +22,7 @@ namespace Tour_Planner.Models
             }
         }
 
+        private string name;
         public string Name
         {
             get { return name; }
@@ -30,7 +36,7 @@ namespace Tour_Planner.Models
             }
         }
 
-        private string name { get; set; }
+        public int Id;
         public string Description { get; set; }
         public string From { get; set; }
         public string To { get; set; }

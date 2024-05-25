@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
@@ -10,10 +11,11 @@ namespace Tour_Planner.ViewModels
     {
         public TourPlannerVM()
         {
-            tours = new ObservableCollection<Tour>();
-
-            tours.Add(new Tour() { Name = "TourA", Description = "asdf", From = "A", To = "Z", TransportType = "Bim", Distance = 2, EstimatedTime = 3 });
-            tours.Add(new Tour() { Name = "TourB", Description = "jklö", From = "B", To = "Y", TransportType = "UBahn", Distance = 2, EstimatedTime = 3 });
+            Tours = new ObservableCollection<Tour>
+            {
+                new Tour { Name = "TourA", Description = "asdf", From = "A", To = "Z", TransportType = "Bim", Distance = 2, EstimatedTime = 3 },
+                new Tour { Name = "TourB", Description = "jklö", From = "B", To = "Y", TransportType = "UBahn", Distance = 2, EstimatedTime = 3 }
+            };
 
             AddTourCommand = new RelayCommand(o => AddTour());
             UpdateTourCommand = new RelayCommand(o => UpdateTour());
@@ -26,18 +28,139 @@ namespace Tour_Planner.ViewModels
             NewDateTime = DateTime.Now;
         }
 
+        public ObservableCollection<Tour> Tours { get; set; }
+
+        private Tour selectedTour;
+        public Tour SelectedTour
+        {
+            get { return selectedTour; }
+            set
+            {
+                selectedTour = value;
+                OnPropertyChanged();
+
+                if (selectedTour != null)
+                {
+                    NewTourName = selectedTour.Name;
+                    NewTourDescr = selectedTour.Description;
+                    NewTourFrom = selectedTour.From;
+                    NewTourTo = selectedTour.To;
+                    NewTourTransType = selectedTour.TransportType;
+                    NewTourDistance = selectedTour.Distance;
+                    NewTourEstTime = selectedTour.EstimatedTime;
+                }
+                else
+                {
+                    ClearTourFields();
+                }
+            }
+        }
+
+        private void ClearTourFields()
+        {
+            NewTourName = string.Empty;
+            NewTourDescr = string.Empty;
+            NewTourFrom = string.Empty;
+            NewTourTo = string.Empty;
+            NewTourTransType = string.Empty;
+            NewTourDistance = 0;
+            NewTourEstTime = 0;
+        }
+
+        private string newTourName;
+        public string NewTourName
+        {
+            get { return newTourName; }
+            set
+            {
+                newTourName = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private string newTourDescr;
+        public string NewTourDescr
+        {
+            get { return newTourDescr; }
+            set
+            {
+                newTourDescr = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private string newTourFrom;
+        public string NewTourFrom
+        {
+            get { return newTourFrom; }
+            set
+            {
+                newTourFrom = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private string newTourTo;
+        public string NewTourTo
+        {
+            get { return newTourTo; }
+            set
+            {
+                newTourTo = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private string newTourTransType;
+        public string NewTourTransType
+        {
+            get { return newTourTransType; }
+            set
+            {
+                newTourTransType = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int newTourDistance;
+        public int NewTourDistance
+        {
+            get { return newTourDistance; }
+            set
+            {
+                newTourDistance = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int newTourEstTime;
+        public int NewTourEstTime
+        {
+            get { return newTourEstTime; }
+            set
+            {
+                newTourEstTime = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public ICommand AddTourCommand { get; set; }
+        public ICommand UpdateTourCommand { get; set; }
+        public ICommand DeleteTourCommand { get; set; }
+
         public void AddTour()
         {
-            Tour t = new Tour();
-            t.Name = newTourName;
-            t.Description = newTourDescr;
-            t.From = newTourFrom;
-            t.To = newTourTo;
-            t.TransportType = newTourTransType;
-            t.Distance = newTourDistance;
-            t.EstimatedTime = newTourEstTime;
-
-            tours.Add(t);
+            var newTour = new Tour
+            {
+                Name = NewTourName,
+                Description = NewTourDescr,
+                From = NewTourFrom,
+                To = NewTourTo,
+                TransportType = NewTourTransType,
+                Distance = NewTourDistance,
+                EstimatedTime = NewTourEstTime
+            };
+            Tours.Add(newTour);
         }
 
         public void UpdateTour()
@@ -63,20 +186,139 @@ namespace Tour_Planner.ViewModels
             }
         }
 
+        private Tour tourLogsSelectedTour;
+        public Tour TourLogsSelectedTour
+        {
+            get { return tourLogsSelectedTour; }
+            set
+            {
+                tourLogsSelectedTour = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private TourLog selectedTourLog;
+        public TourLog SelectedTourLog
+        {
+            get { return selectedTourLog; }
+            set
+            {
+                selectedTourLog = value;
+                OnPropertyChanged();
+
+                if (selectedTourLog != null)
+                {
+                    NewDateTime = selectedTourLog.DateTime;
+                    NewComment = selectedTourLog.Comment;
+                    NewDifficulty = selectedTourLog.Difficulty;
+                    NewTotalDistance = selectedTourLog.TotalDistance;
+                    NewTotalTime = selectedTourLog.TotalTime;
+                    NewRating = selectedTourLog.Rating;
+                }
+                else
+                {
+                    ClearTourLogFields();
+                }
+            }
+        }
+
+        private void ClearTourLogFields()
+        {
+            NewDateTime = DateTime.Now;
+            NewComment = string.Empty;
+            NewDifficulty = string.Empty;
+            NewTotalDistance = string.Empty;
+            NewTotalTime = string.Empty;
+            NewRating = 0;
+        }
+
+        public DateTime newdateTime { get; set; }
+        public string newcomment { get; set; }
+        public string newdifficulty { get; set; }
+        public string newtotalDistance { get; set; }
+        public string newtotalTime { get; set; }
+        public int newrating { get; set; }
+
+        public DateTime NewDateTime
+        {
+            get { return newdateTime; }
+            set
+            {
+                newdateTime = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string NewComment
+        {
+            get { return newcomment; }
+            set
+            {
+                newcomment = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string NewDifficulty
+        {
+            get { return newdifficulty; }
+            set
+            {
+                newdifficulty = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string NewTotalDistance
+        {
+            get { return newtotalDistance; }
+            set
+            {
+                newtotalDistance = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string NewTotalTime
+        {
+            get { return newtotalTime; }
+            set
+            {
+                newtotalTime = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public int NewRating
+        {
+            get { return newrating; }
+            set
+            {
+                newrating = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public ICommand AddTourLogCommand { get; set; }
+        public ICommand DeleteTourLogCommand { get; set; }
+        public ICommand SaveTourLogCommand { get; set; }
+
         public void AddTourLog()
         {
-            TourLog t = new TourLog();
-            t.tour = selectedTour;
-            t.DateTime = newdateTime;
-            t.Comment = newcomment;
-            t.Difficulty = newdifficulty;
-            t.TotalDistance = newtotalDistance;
-            t.TotalTime = newtotalTime;
-            t.Rating = newrating;
+            var newTourLog = new TourLog
+            {
+                Tour = TourLogsSelectedTour,
+                DateTime = NewDateTime,
+                Comment = NewComment,
+                Difficulty = NewDifficulty,
+                TotalDistance = NewTotalDistance,
+                TotalTime = NewTotalTime,
+                Rating = NewRating
+            };
 
-            if (TourLogsSelectedTour != null)
-                TourLogsSelectedTour.TourLogs.Add(t);
+            TourLogsSelectedTour?.TourLogs.Add(newTourLog);
         }
+
         public void DeleteTourLog()
         {
             if (SelectedTourLog != null && TourLogsSelectedTour != null)
@@ -85,11 +327,12 @@ namespace Tour_Planner.ViewModels
                 SelectedTourLog = null;
             }
         }
+
         public void SaveTourLog()
         {
             if (SelectedTourLog != null && TourLogsSelectedTour != null)
             {
-                int index = TourLogsSelectedTour.TourLogs.IndexOf(SelectedTourLog);
+                var index = TourLogsSelectedTour.TourLogs.IndexOf(SelectedTourLog);
                 if (index != -1)
                 {
                     SelectedTourLog.DateTime = NewDateTime;
@@ -104,305 +347,8 @@ namespace Tour_Planner.ViewModels
             }
         }
 
-        private Tour tourLogsSelectedTour;
-        private Tour selectedTour;
-        private TourLog selectedTourLog;
-        private ObservableCollection<Tour> tours;
-
-        public ObservableCollection<Tour> Tours
-        {
-            get
-            {
-                return tours;
-            }
-
-            set
-            {
-                tours = value;
-                OnPropertyChanged();
-            }
-        }
-
-        #region Tour Data
-        private string newTourName { get; set; }
-        private string newTourDescr { get; set; }
-        private string newTourFrom { get; set; }
-        private string newTourTo { get; set; }
-        private string newTourTransType { get; set; }
-        private int newTourDistance { get; set; }
-        private int newTourEstTime { get; set; }
-
-        public ICommand AddTourCommand { get; set; }
-        public ICommand UpdateTourCommand { get; set; }
-        public ICommand DeleteTourCommand { get; set; }
-
-        public Tour SelectedTour
-        {
-            get
-            {
-                return selectedTour;
-            }
-
-            set
-            {
-                selectedTour = value;
-                OnPropertyChanged();
-
-                if (selectedTour != null)
-                {
-                    NewTourName = selectedTour.Name;
-                    NewTourDescr = selectedTour.Description;
-                    NewTourFrom = selectedTour.From;
-                    NewTourTo = selectedTour.To;
-                    NewTourTransType = selectedTour.TransportType;
-                    NewTourDistance = selectedTour.Distance;
-                    NewTourEstTime = selectedTour.EstimatedTime;
-                }
-
-                else
-                {
-                    NewTourName = "";
-                    NewTourDescr = "";
-                    NewTourFrom = "";
-                    NewTourTo = "";
-                    NewTourTransType = "";
-                    NewTourDistance = 0;
-                    NewTourEstTime = 0;
-                }
-            }
-        }
-        public string NewTourName
-        {
-            get
-            {
-                return newTourName;
-            }
-
-            set
-            {
-                newTourName = value;
-                OnPropertyChanged();
-            }
-        }
-        public string NewTourDescr
-        {
-            get
-            {
-                return newTourDescr;
-            }
-
-            set
-            {
-                newTourDescr = value;
-                OnPropertyChanged();
-            }
-        }
-        public string NewTourFrom
-        {
-            get
-            {
-                return newTourFrom;
-            }
-
-            set
-            {
-                newTourFrom = value;
-                OnPropertyChanged();
-            }
-        }
-        public string NewTourTo
-        {
-            get
-            {
-                return newTourTo;
-            }
-
-            set
-            {
-                newTourTo = value;
-                OnPropertyChanged();
-            }
-        }
-        public string NewTourTransType
-        {
-            get
-            {
-                return newTourTransType;
-            }
-
-            set
-            {
-                newTourTransType = value;
-                OnPropertyChanged();
-            }
-        }
-        public int NewTourDistance
-        {
-            get
-            {
-                return newTourDistance;
-            }
-
-            set
-            {
-                newTourDistance = value;
-                OnPropertyChanged();
-            }
-        }
-        public int NewTourEstTime
-        {
-            get
-            {
-                return newTourEstTime;
-            }
-
-            set
-            {
-                newTourEstTime = value;
-                OnPropertyChanged();
-            }
-        }
-        #endregion
-
-        #region TourLogs Data
-        public DateTime newdateTime { get; set; }
-        public string newcomment { get; set; }
-        public string newdifficulty { get; set; }
-        public string newtotalDistance { get; set; }
-        public string newtotalTime { get; set; }
-        public int newrating { get; set; }
-
-        public ICommand AddTourLogCommand { get; set; }
-        public ICommand DeleteTourLogCommand { get; set; }
-        public ICommand SaveTourLogCommand { get; set; }
-
-        public DateTime NewDateTime
-        {
-            get
-            {
-                return newdateTime;
-            }
-
-            set
-            {
-                newdateTime = value;
-                OnPropertyChanged();
-            }
-        }
-        public string NewComment
-        {
-            get
-            {
-                return newcomment;
-            }
-
-            set
-            {
-                newcomment = value;
-                OnPropertyChanged();
-            }
-        }
-        public string NewDifficulty
-        {
-            get
-            {
-                return newdifficulty;
-            }
-
-            set
-            {
-                newdifficulty = value;
-                OnPropertyChanged();
-            }
-        }
-        public string NewTotalDistance
-        {
-            get
-            {
-                return newtotalDistance;
-            }
-
-            set
-            {
-                newtotalDistance = value;
-                OnPropertyChanged();
-            }
-        }
-        public string NewTotalTime
-        {
-            get
-            {
-                return newtotalTime;
-            }
-
-            set
-            {
-                newtotalTime = value;
-                OnPropertyChanged();
-            }
-        }
-        public int NewRating
-        {
-            get
-            {
-                return newrating;
-            }
-
-            set
-            {
-                if (int.TryParse(value.ToString(), out int intValue))
-                {
-                    newrating = intValue;
-                    OnPropertyChanged();
-                }
-            }
-        }
-        public Tour TourLogsSelectedTour
-        {
-            get
-            {
-                return tourLogsSelectedTour;
-            }
-
-            set
-            {
-                tourLogsSelectedTour = value;
-                OnPropertyChanged();
-            }
-        }
-        public TourLog SelectedTourLog
-        {
-            get { return selectedTourLog; }
-            set
-            {
-                selectedTourLog = value;
-                OnPropertyChanged(nameof(SelectedTourLog));
-
-                if (selectedTourLog != null)
-                {
-                    NewDateTime = selectedTourLog.DateTime;
-                    NewComment = selectedTourLog.Comment;
-                    NewDifficulty = selectedTourLog.Difficulty;
-                    NewTotalDistance = selectedTourLog.TotalDistance;
-                    NewTotalTime = selectedTourLog.TotalTime;
-                    NewRating = selectedTourLog.Rating;
-                }
-                else
-                {
-                    NewDateTime = DateTime.Now;
-                    NewComment = "";
-                    NewDifficulty = "";
-                    NewTotalDistance = "";
-                    NewTotalTime = "";
-                    NewRating = 0;
-                }
-            }
-        }
-        #endregion
-
-
         public event PropertyChangedEventHandler PropertyChanged;
-        private void OnPropertyChanged([CallerMemberName] string name = null)
+        protected virtual void OnPropertyChanged([CallerMemberName] string name = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
