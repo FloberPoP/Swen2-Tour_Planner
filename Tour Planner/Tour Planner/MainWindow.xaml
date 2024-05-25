@@ -3,7 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Tour_Planner"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:local="clr-namespace:Tour_Planner.ViewModels"
         xmlns:app="clr-namespace:Tour_Planner"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
@@ -71,8 +72,8 @@
                     </StackPanel>
 
                     <!-- Searchbar -->
-                    <TextBox Text="Search ..." Grid.Column="1" Grid.Row="1" Grid.RowSpan="1" Grid.ColumnSpan="2"  Height="20" VerticalAlignment="Center"/>
-
+                    <xctk:WatermarkTextBox Watermark="Search ..."  Grid.Column="1" Grid.Row="1" Grid.RowSpan="1" Grid.ColumnSpan="2"  Height="22" VerticalAlignment="Center" TextChanged="TextBox_TextChanged"/>
+                    
                     <!-- Tour List -->
                     <ListBox x:Name="tourListBox" ItemsSource="{Binding Tours}" DisplayMemberPath="Name" Grid.Column="1" Grid.Row="2" Grid.RowSpan="1" Grid.ColumnSpan="1" SelectionChanged="TourListBox_SelectionChanged" Padding="0,5,0,0"/>
 

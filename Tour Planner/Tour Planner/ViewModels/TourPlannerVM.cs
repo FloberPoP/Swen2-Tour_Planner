@@ -2,8 +2,9 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using Tour_Planner.Models;
 
-namespace Tour_Planner
+namespace Tour_Planner.ViewModels
 {
     public class TourPlannerVM : INotifyPropertyChanged
     {
@@ -16,7 +17,7 @@ namespace Tour_Planner
 
             AddTourCommand = new RelayCommand(o => AddTour());
             UpdateTourCommand = new RelayCommand(o => UpdateTour());
-            DeleteTourCommand = new RelayCommand(o =>  DeleteTour());
+            DeleteTourCommand = new RelayCommand(o => DeleteTour());
 
             AddTourLogCommand = new RelayCommand(o => AddTourLog());
             DeleteTourLogCommand = new RelayCommand(o => DeleteTourLog());
@@ -24,7 +25,7 @@ namespace Tour_Planner
 
             NewDateTime = DateTime.Now;
         }
-     
+
         public void AddTour()
         {
             Tour t = new Tour();
@@ -74,7 +75,7 @@ namespace Tour_Planner
             t.Rating = newrating;
 
             if (TourLogsSelectedTour != null)
-                TourLogsSelectedTour.TourLogs.Add(t);                                 
+                TourLogsSelectedTour.TourLogs.Add(t);
         }
         public void DeleteTourLog()
         {
@@ -270,7 +271,7 @@ namespace Tour_Planner
         public string newtotalDistance { get; set; }
         public string newtotalTime { get; set; }
         public int newrating { get; set; }
-        
+
         public ICommand AddTourLogCommand { get; set; }
         public ICommand DeleteTourLogCommand { get; set; }
         public ICommand SaveTourLogCommand { get; set; }

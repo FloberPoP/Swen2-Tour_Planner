@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tour_Planner
+namespace Tour_Planner.Models
 {
     public class TourLog : INotifyPropertyChanged
     {
@@ -15,7 +15,7 @@ namespace Tour_Planner
         public string Comment { get; set; }
         public string Difficulty { get; set; }
         public string TotalDistance { get; set; }
-        public string TotalTime { get; set; }             
+        public string TotalTime { get; set; }
         public int Rating { get; set; }
 
         public DateTime DateTime

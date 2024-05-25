@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 
-namespace Tour_Planner
+namespace Tour_Planner.Models
 {
     public class Tour : INotifyPropertyChanged
     {
@@ -22,7 +22,7 @@ namespace Tour_Planner
             get { return name; }
             set
             {
-                if (name != value) 
+                if (name != value)
                 {
                     name = value;
                     OnPropertyChanged(nameof(Name));

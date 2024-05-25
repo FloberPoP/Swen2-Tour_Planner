@@ -1,4 +1,5 @@
 ﻿using Tour_Planner;
+using Tour_Planner.ViewModels;
 
 namespace UnitTests
 {
