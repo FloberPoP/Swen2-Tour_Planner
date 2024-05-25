@@ -1,4 +1,6 @@
-﻿using Tour_Planner.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using Tour_Planner.DAL;
+using Tour_Planner.Models;
 using Tour_Planner.ViewModels;
 
 namespace UnitTests
@@ -11,7 +13,15 @@ namespace UnitTests
         [TestInitialize]
         public void SetUp()
         {
-            tourPlannerVM = new TourPlannerVM();
+            // Create options for in-memory database
+            var options = new DbContextOptionsBuilder<TourContext>()
+                .UseInMemoryDatabase(databaseName: "TestDatabase")
+                .Options;
+
+            // Create instance of TourContext with in-memory database options
+            TourContext context = new TourContext(options);
+            ITourRepository tourRepository = new TourRepository(context);
+            tourPlannerVM = new TourPlannerVM(tourRepository);
         }
 
         [TestMethod]

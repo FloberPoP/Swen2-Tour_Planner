@@ -4,6 +4,10 @@ using Tour_Planner.Models;
 using Tour_Planner.ViewModels;
 using log4net.Config;
 using log4net;
+using Tour_Planner.DAL;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using System.IO;
 
 namespace Tour_Planner
 {
@@ -16,6 +20,25 @@ namespace Tour_Planner
             XmlConfigurator.Configure();
             Log.Info("Application starting...");
             InitializeComponent();
+
+            // Build configuration
+            IConfigurationRoot configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings/appsettings.json")
+                .Build();
+
+            // Get connection string from appsettings.json
+            string connectionString = configuration.GetConnectionString("DefaultConnection");
+
+            // Configure the DbContextOptions for TourContext
+            var optionsBuilder = new DbContextOptionsBuilder<TourContext>();
+            optionsBuilder.UseNpgsql(connectionString);
+
+            // Create TourRepository with the configured TourContext
+            var tourRepository = new TourRepository(new TourContext(optionsBuilder.Options));
+
+            // Create TourPlannerVM with the TourRepository
+            DataContext = new TourPlannerVM(tourRepository);
         }
 
         private void TourListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)

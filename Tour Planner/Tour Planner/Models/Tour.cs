@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace Tour_Planner.Models
 {
@@ -36,7 +37,8 @@ namespace Tour_Planner.Models
             }
         }
 
-        public int Id;
+        [Key]
+        public int Id { get; set; }
         public string Description { get; set; }
         public string From { get; set; }
         public string To { get; set; }

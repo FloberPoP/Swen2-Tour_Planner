@@ -8,9 +8,6 @@
         xmlns:app="clr-namespace:Tour_Planner"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Window.DataContext>
-        <local:TourPlannerVM/>
-    </Window.DataContext>
     <Grid>
         <TabControl Grid.ColumnSpan="2">
             <TabItem Header="Home">

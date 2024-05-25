@@ -3,19 +3,17 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using Tour_Planner.DAL;
 using Tour_Planner.Models;
 
 namespace Tour_Planner.ViewModels
 {
     public class TourPlannerVM : INotifyPropertyChanged
     {
-        public TourPlannerVM()
+        private readonly ITourRepository _tourRepository;
+        public TourPlannerVM(ITourRepository tourRepository)
         {
-            Tours = new ObservableCollection<Tour>
-            {
-                new Tour { Name = "TourA", Description = "asdf", From = "A", To = "Z", TransportType = "Bim", Distance = 2, EstimatedTime = 3 },
-                new Tour { Name = "TourB", Description = "jklö", From = "B", To = "Y", TransportType = "UBahn", Distance = 2, EstimatedTime = 3 }
-            };
+            _tourRepository = tourRepository;
 
             AddTourCommand = new RelayCommand(o => AddTour());
             UpdateTourCommand = new RelayCommand(o => UpdateTour());
@@ -26,6 +24,7 @@ namespace Tour_Planner.ViewModels
             SaveTourLogCommand = new RelayCommand(o => SaveTourLog());
 
             NewDateTime = DateTime.Now;
+            LoadTours();
         }
 
         public ObservableCollection<Tour> Tours { get; set; }
@@ -160,7 +159,8 @@ namespace Tour_Planner.ViewModels
                 Distance = NewTourDistance,
                 EstimatedTime = NewTourEstTime
             };
-            Tours.Add(newTour);
+            _tourRepository.AddTour(newTour);
+            LoadTours();
         }
 
         public void UpdateTour()
@@ -174,6 +174,9 @@ namespace Tour_Planner.ViewModels
                 SelectedTour.TransportType = NewTourTransType;
                 SelectedTour.Distance = NewTourDistance;
                 SelectedTour.EstimatedTime = NewTourEstTime;
+
+                _tourRepository.UpdateTour(SelectedTour);
+                LoadTours();
             }
         }
 
@@ -181,9 +184,13 @@ namespace Tour_Planner.ViewModels
         {
             if (SelectedTour != null)
             {
-                Tours.Remove(SelectedTour);
-                SelectedTour = null;
+                _tourRepository.DeleteTour(SelectedTour.Id);
+                LoadTours();
             }
+        }
+        private void LoadTours()
+        {
+            Tours = new ObservableCollection<Tour>(_tourRepository.GetAllTours());
         }
 
         private Tour tourLogsSelectedTour;
@@ -305,18 +312,22 @@ namespace Tour_Planner.ViewModels
 
         public void AddTourLog()
         {
-            var newTourLog = new TourLog
+            if (TourLogsSelectedTour != null)
             {
-                Tour = TourLogsSelectedTour,
-                DateTime = NewDateTime,
-                Comment = NewComment,
-                Difficulty = NewDifficulty,
-                TotalDistance = NewTotalDistance,
-                TotalTime = NewTotalTime,
-                Rating = NewRating
-            };
+                var newTourLog = new TourLog
+                {
+                    Tour = TourLogsSelectedTour,
+                    DateTime = NewDateTime,
+                    Comment = NewComment,
+                    Difficulty = NewDifficulty,
+                    TotalDistance = NewTotalDistance,
+                    TotalTime = NewTotalTime,
+                    Rating = NewRating
+                };
 
-            TourLogsSelectedTour?.TourLogs.Add(newTourLog);
+                TourLogsSelectedTour.TourLogs.Add(newTourLog);
+                _tourRepository.UpdateTour(TourLogsSelectedTour);
+            }
         }
 
         public void DeleteTourLog()
@@ -324,7 +335,7 @@ namespace Tour_Planner.ViewModels
             if (SelectedTourLog != null && TourLogsSelectedTour != null)
             {
                 TourLogsSelectedTour.TourLogs.Remove(SelectedTourLog);
-                SelectedTourLog = null;
+                _tourRepository.UpdateTour(TourLogsSelectedTour);
             }
         }
 
@@ -332,18 +343,14 @@ namespace Tour_Planner.ViewModels
         {
             if (SelectedTourLog != null && TourLogsSelectedTour != null)
             {
-                var index = TourLogsSelectedTour.TourLogs.IndexOf(SelectedTourLog);
-                if (index != -1)
-                {
-                    SelectedTourLog.DateTime = NewDateTime;
-                    SelectedTourLog.Comment = NewComment;
-                    SelectedTourLog.Difficulty = NewDifficulty;
-                    SelectedTourLog.TotalDistance = NewTotalDistance;
-                    SelectedTourLog.TotalTime = NewTotalTime;
-                    SelectedTourLog.Rating = NewRating;
+                SelectedTourLog.DateTime = NewDateTime;
+                SelectedTourLog.Comment = NewComment;
+                SelectedTourLog.Difficulty = NewDifficulty;
+                SelectedTourLog.TotalDistance = NewTotalDistance;
+                SelectedTourLog.TotalTime = NewTotalTime;
+                SelectedTourLog.Rating = NewRating;
 
-                    TourLogsSelectedTour.TourLogs[index] = SelectedTourLog;
-                }
+                _tourRepository.UpdateTour(TourLogsSelectedTour);
             }
         }
 

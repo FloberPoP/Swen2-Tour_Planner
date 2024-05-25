@@ -1,5 +1,5 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Runtime.CompilerServices;
 
 namespace Tour_Planner.Models
@@ -22,6 +22,8 @@ namespace Tour_Planner.Models
             }
         }
 
+        [Key]
+        public int Id { get; set; }
         public string Comment { get; set; }
         public string Difficulty { get; set; }
         public string TotalDistance { get; set; }
