@@ -5,9 +5,6 @@ using Tour_Planner.ViewModels;
 using log4net.Config;
 using log4net;
 using Tour_Planner.DAL;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using System.IO;
 
 namespace Tour_Planner
 {
@@ -15,29 +12,15 @@ namespace Tour_Planner
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(App));
 
-        public MainWindow()
+        private readonly TourContext _context;
+        public MainWindow(TourContext context)
         {
             XmlConfigurator.Configure();
             Log.Info("Application starting...");
+
             InitializeComponent();
-
-            // Build configuration
-            IConfigurationRoot configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings/appsettings.json")
-                .Build();
-
-            // Get connection string from appsettings.json
-            string connectionString = configuration.GetConnectionString("DefaultConnection");
-
-            // Configure the DbContextOptions for TourContext
-            var optionsBuilder = new DbContextOptionsBuilder<TourContext>();
-            optionsBuilder.UseNpgsql(connectionString);
-
-            // Create TourRepository with the configured TourContext
-            var tourRepository = new TourRepository(new TourContext(optionsBuilder.Options));
-
-            // Create TourPlannerVM with the TourRepository
+            _context = context;
+            var tourRepository = new TourRepository(context);
             DataContext = new TourPlannerVM(tourRepository);
         }
 
@@ -48,12 +31,6 @@ namespace Tour_Planner
                 Tour selectedTour = tourListBox.SelectedItem as Tour;
                 (DataContext as TourPlannerVM).SelectedTour = selectedTour;
             }
-        }
-
-
-        private void TourLogsListBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-        {
-
         }
 
         #region Menu
@@ -69,48 +46,43 @@ namespace Tour_Planner
 
         private void AddTour_Click(object sender, RoutedEventArgs e)
         {
-
+            // Implementation here
         }
 
         private void DeleteTour_Click(object sender, RoutedEventArgs e)
         {
-            
+            // Implementation here
         }
 
         private void UpdateTour_Click(object sender, RoutedEventArgs e)
         {
-            
+            // Implementation here
         }
 
         private void AddLogsButton_Click(object sender, RoutedEventArgs e)
         {
-            
+            // Implementation here
         }
 
         private void DeleteLogsButton_Click(object sender, RoutedEventArgs e)
         {
-            
+            // Implementation here
         }
 
         private void UpdateLogsButton_Click(object sender, RoutedEventArgs e)
         {
-           
+            // Implementation here
         }
 
         private void ExportButton_Click(object sender, RoutedEventArgs e)
         {
-
+            // Implementation here
         }
 
         private void ImportButton_Click(object sender, RoutedEventArgs e)
         {
-
+            // Implementation here
         }
         #endregion
-
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-
-        }
     }
 }
