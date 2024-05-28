@@ -5,6 +5,8 @@ using Tour_Planner.ViewModels;
 using log4net.Config;
 using log4net;
 using Tour_Planner.DAL;
+using Tour_Planner.BL;
+
 
 namespace Tour_Planner
 {
@@ -12,16 +14,16 @@ namespace Tour_Planner
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(App));
 
-        private readonly TourContext _context;
-        public MainWindow(TourContext context)
+        private readonly ITourService _tourService;
+
+        public MainWindow(ITourService tourService)
         {
             XmlConfigurator.Configure();
             Log.Info("Application starting...");
 
             InitializeComponent();
-            _context = context;
-            var tourRepository = new TourRepository(context);
-            DataContext = new TourPlannerVM(tourRepository);
+            _tourService = tourService;
+            DataContext = new TourPlannerVM(_tourService);
         }
 
         private void TourListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -34,6 +36,7 @@ namespace Tour_Planner
         }
 
         #region Menu
+        /*
         private void HamburgerMenu_Checked(object sender, RoutedEventArgs e)
         {
             menuItemsPanel.Visibility = Visibility.Visible;
@@ -46,43 +49,49 @@ namespace Tour_Planner
 
         private void AddTour_Click(object sender, RoutedEventArgs e)
         {
-            // Implementation here
+
         }
 
         private void DeleteTour_Click(object sender, RoutedEventArgs e)
         {
-            // Implementation here
+            
         }
 
         private void UpdateTour_Click(object sender, RoutedEventArgs e)
         {
-            // Implementation here
+            
         }
 
         private void AddLogsButton_Click(object sender, RoutedEventArgs e)
         {
-            // Implementation here
+            
         }
 
         private void DeleteLogsButton_Click(object sender, RoutedEventArgs e)
         {
-            // Implementation here
+            
         }
 
         private void UpdateLogsButton_Click(object sender, RoutedEventArgs e)
         {
-            // Implementation here
+           
         }
 
         private void ExportButton_Click(object sender, RoutedEventArgs e)
         {
-            // Implementation here
+
         }
 
         private void ImportButton_Click(object sender, RoutedEventArgs e)
         {
-            // Implementation here
+
         }
+        */
         #endregion
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
+        
     }
 }

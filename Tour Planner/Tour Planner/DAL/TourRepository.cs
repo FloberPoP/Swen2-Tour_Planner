@@ -30,9 +30,15 @@ namespace Tour_Planner.DAL
 
         public void UpdateTour(Tour tour)
         {
+            foreach (var tourLog in tour.TourLogs)
+            {
+                tourLog.DateTime = tourLog.DateTime.ToUniversalTime();
+            }
+
             _context.Tours.Update(tour);
             _context.SaveChanges();
         }
+
 
         public void DeleteTour(int id)
         {

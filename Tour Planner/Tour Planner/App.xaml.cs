@@ -6,8 +6,8 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Windows;
+using Tour_Planner.BL;
 using Tour_Planner.Models;
-using Tour_Planner;
 
 namespace Tour_Planner.DAL
 {
@@ -29,8 +29,10 @@ namespace Tour_Planner.DAL
                 {
                     services.AddDbContext<TourContext>(options =>
                         options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
-
+                    services.AddScoped<ITourRepository, TourRepository>();
+                    services.AddScoped<ITourService, TourService>();
                     services.AddSingleton<MainWindow>();
+
                 })
                 .Build();
         }

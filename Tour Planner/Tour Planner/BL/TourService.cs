@@ -1,5 +1,6 @@
 ﻿using Tour_Planner.DAL;
 using Tour_Planner.Models;
+using System.Linq;
 
 namespace Tour_Planner.BL
 {
@@ -20,8 +21,20 @@ namespace Tour_Planner.BL
         public void AddTour(Tour tour)
         {
             _tourRepository.AddTour(tour);
-        }    
+        }
 
-        // Implement other methods for update, delete, etc.
+        public void UpdateTour(Tour tour)
+        {
+            _tourRepository.UpdateTour(tour);
+        }
+
+        public void DeleteTour(int id)
+        {
+            var tourToDelete = _tourRepository.GetTourById(id);
+            if (tourToDelete != null)
+            {
+                _tourRepository.DeleteTour(id);
+            }
+        }
     }
 }

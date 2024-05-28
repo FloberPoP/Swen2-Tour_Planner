@@ -3,17 +3,18 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
-using Tour_Planner.DAL;
 using Tour_Planner.Models;
+using Tour_Planner.BL;
 
 namespace Tour_Planner.ViewModels
 {
     public class TourPlannerVM : INotifyPropertyChanged
     {
-        private readonly ITourRepository _tourRepository;
-        public TourPlannerVM(ITourRepository tourRepository)
+        private readonly ITourService _tourService;
+
+        public TourPlannerVM(ITourService tourService)
         {
-            _tourRepository = tourRepository;
+            _tourService = tourService;
 
             AddTourCommand = new RelayCommand(o => AddTour());
             UpdateTourCommand = new RelayCommand(o => UpdateTour());
@@ -157,10 +158,11 @@ namespace Tour_Planner.ViewModels
                 To = NewTourTo,
                 TransportType = NewTourTransType,
                 Distance = NewTourDistance,
-                EstimatedTime = NewTourEstTime
+                EstimatedTime = NewTourEstTime,
+                Img = "PlaceHolder"
             };
-            _tourRepository.AddTour(newTour);
-            LoadTours();
+            _tourService.AddTour(newTour);
+            Tours.Add(newTour);
         }
 
         public void UpdateTour()
@@ -174,9 +176,9 @@ namespace Tour_Planner.ViewModels
                 SelectedTour.TransportType = NewTourTransType;
                 SelectedTour.Distance = NewTourDistance;
                 SelectedTour.EstimatedTime = NewTourEstTime;
+                SelectedTour.Img = "PlaceHolder";
 
-                _tourRepository.UpdateTour(SelectedTour);
-                LoadTours();
+                _tourService.UpdateTour(SelectedTour);              
             }
         }
 
@@ -184,13 +186,13 @@ namespace Tour_Planner.ViewModels
         {
             if (SelectedTour != null)
             {
-                _tourRepository.DeleteTour(SelectedTour.Id);
-                LoadTours();
+                _tourService.DeleteTour(SelectedTour.Id);
+                Tours.Remove(SelectedTour);
             }
         }
         private void LoadTours()
         {
-            Tours = new ObservableCollection<Tour>(_tourRepository.GetAllTours());
+            Tours = new ObservableCollection<Tour>(_tourService.GetAllTours());
         }
 
         private Tour tourLogsSelectedTour;
@@ -322,11 +324,11 @@ namespace Tour_Planner.ViewModels
                     Difficulty = NewDifficulty,
                     TotalDistance = NewTotalDistance,
                     TotalTime = NewTotalTime,
-                    Rating = NewRating
+                    Rating = NewRating                   
                 };
 
                 TourLogsSelectedTour.TourLogs.Add(newTourLog);
-                _tourRepository.UpdateTour(TourLogsSelectedTour);
+                _tourService.UpdateTour(TourLogsSelectedTour);
             }
         }
 
@@ -335,7 +337,7 @@ namespace Tour_Planner.ViewModels
             if (SelectedTourLog != null && TourLogsSelectedTour != null)
             {
                 TourLogsSelectedTour.TourLogs.Remove(SelectedTourLog);
-                _tourRepository.UpdateTour(TourLogsSelectedTour);
+                _tourService.UpdateTour(TourLogsSelectedTour);
             }
         }
 
@@ -350,7 +352,7 @@ namespace Tour_Planner.ViewModels
                 SelectedTourLog.TotalTime = NewTotalTime;
                 SelectedTourLog.Rating = NewRating;
 
-                _tourRepository.UpdateTour(TourLogsSelectedTour);
+                _tourService.UpdateTour(TourLogsSelectedTour);
             }
         }
 
