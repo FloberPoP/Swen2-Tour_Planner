@@ -6,6 +6,8 @@ using log4net.Config;
 using log4net;
 using Tour_Planner.DAL;
 using Tour_Planner.BL;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Win32;
 
 
 namespace Tour_Planner
@@ -15,7 +17,6 @@ namespace Tour_Planner
         private static readonly ILog Log = LogManager.GetLogger(typeof(App));
 
         private readonly ITourService _tourService;
-
         public MainWindow(ITourService tourService)
         {
             XmlConfigurator.Configure();
@@ -35,9 +36,24 @@ namespace Tour_Planner
                 (DataContext as TourPlannerVM).SelectedTour = selectedTour;
             }
         }
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
 
-        #region Menu
-        /*
+        }
+
+        private void ImportFileButton_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "JSON Files (*.json)|*.json";
+            if (openFileDialog.ShowDialog() == true)
+            {
+                string selectedFileName = openFileDialog.FileName;
+                if (DataContext is TourPlannerVM viewModel)
+                {
+                    viewModel.ImportTourDataCommand.Execute(selectedFileName);
+                }
+            }
+        }
         private void HamburgerMenu_Checked(object sender, RoutedEventArgs e)
         {
             menuItemsPanel.Visibility = Visibility.Visible;
@@ -47,52 +63,5 @@ namespace Tour_Planner
         {
             menuItemsPanel.Visibility = Visibility.Collapsed;
         }
-
-        private void AddTour_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void DeleteTour_Click(object sender, RoutedEventArgs e)
-        {
-            
-        }
-
-        private void UpdateTour_Click(object sender, RoutedEventArgs e)
-        {
-            
-        }
-
-        private void AddLogsButton_Click(object sender, RoutedEventArgs e)
-        {
-            
-        }
-
-        private void DeleteLogsButton_Click(object sender, RoutedEventArgs e)
-        {
-            
-        }
-
-        private void UpdateLogsButton_Click(object sender, RoutedEventArgs e)
-        {
-           
-        }
-
-        private void ExportButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void ImportButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-        */
-        #endregion
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-
-        }
-        
     }
 }

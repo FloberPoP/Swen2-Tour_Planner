@@ -34,39 +34,36 @@
 
 
                     <!-- Hamburger Menu -->
-
-                    <!--<StackPanel x:Name="hamburgerMenu" Background="#333333" Grid.Column="0" Grid.Row="1" Grid.RowSpan="4" Grid.ColumnSpan="1">
+                    <StackPanel x:Name="hamburgerMenu" Background="#333333" Grid.Column="0" Grid.Row="1" Grid.RowSpan="4" Grid.ColumnSpan="1">
                         <ToggleButton x:Name="hamburgerToggleButton" Content="☰" FontSize="18" Foreground="White" Background="#333333" BorderBrush="#333333" Checked="HamburgerMenu_Checked" Unchecked="HamburgerMenu_Unchecked"/>
                         <StackPanel x:Name="menuItemsPanel" Orientation="Vertical" Visibility="Collapsed">
-                            <TextBlock Foreground="White" Margin="5">Tours:</TextBlock>
-                            <Button Click="AddTour_Click" Background="#333333" Margin="5">
-                                <Image Source="/Images/add.png" Width="16" Height="16"/>
+                            <Button Background="#333333" Margin="5" Command="{Binding TourReportCommand}">
+                                <Image Source="/Images/fileDownload.png" Width="16" Height="16"/>
+                                <Button.ToolTip>
+                                    <ToolTip Content="Download Tour Report" Placement="Right"/>
+                                </Button.ToolTip>
                             </Button>
-                            <Button Click="DeleteTour_Click" Background="#333333" Margin="5">
-                                <Image Source="/Images/delete.png" Width="16" Height="16"/>
+                            <Button Background="#333333" Margin="5" Command="{Binding SummarizedTourReportCommand}">
+                                <Image Source="/Images/SummarizedFileDownLoad.png" Width="16" Height="16"/>
+                                <Button.ToolTip>
+                                    <ToolTip Content="Download Summarized Tour Report" Placement="Right"/>
+                                </Button.ToolTip>
                             </Button>
-                            <Button Click="UpdateTour_Click" Background="#333333" Margin="5">
-                                <Image Source="/Images/update.png" Width="16" Height="16"/>
-                            </Button>
-                            <TextBlock Foreground="White" Margin="5">Logs:</TextBlock>
-                            <Button Click="AddLogsButton_Click" Background="#333333" Margin="5">
-                                <Image Source="/Images/add.png" Width="16" Height="16"/>
-                            </Button>
-                            <Button Click="DeleteLogsButton_Click" Background="#333333" Margin="5">
-                                <Image Source="/Images/delete.png" Width="16" Height="16"/>
-                            </Button>
-                            <Button Click="UpdateLogsButton_Click" Background="#333333" Margin="5">
-                                <Image Source="/Images/update.png" Width="16" Height="16"/>
-                            </Button>
-                            <TextBlock Foreground="White" Margin="15"></TextBlock>
-                            <Button Click="ImportButton_Click" Background="#333333" Margin="5">
-                                <Image Source="/Images/import.png" Width="16" Height="16"/>
-                            </Button>
-                            <Button Click="ExportButton_Click" Background="#333333" Margin="5">
+                            <TextBlock Foreground="White" Margin="5"></TextBlock>
+                            <Button Background="#333333" Margin="5" Command="{Binding ExportTourDataCommand}">
                                 <Image Source="/Images/export.png" Width="16" Height="16"/>
+                                <Button.ToolTip>
+                                    <ToolTip Content="Export Tour Data" Placement="Right"/>
+                                </Button.ToolTip>
+                            </Button>
+                            <Button Background="#333333" Margin="5" Click="ImportFileButton_Click">
+                                <Image Source="/Images/import.png" Width="16" Height="16"/>
+                                <Button.ToolTip>
+                                    <ToolTip Content="Import Tour Data" Placement="Right"/>
+                                </Button.ToolTip>
                             </Button>
                         </StackPanel>
-                    </StackPanel>-->
+                    </StackPanel>
 
                     <!-- Searchbar -->
                     <xctk:WatermarkTextBox Watermark="Search ..."  Grid.Column="1" Grid.Row="1" Grid.RowSpan="1" Grid.ColumnSpan="2"  Height="22" VerticalAlignment="Center"/>

@@ -13,6 +13,8 @@
     <None Remove="add.png" />
     <None Remove="delete.png" />
     <None Remove="export.png" />
+    <None Remove="Images\fileDownload.png" />
+    <None Remove="Images\SummarizedFileDownLoad.png" />
     <None Remove="import.png" />
     <None Remove="test.jpg" />
     <None Remove="update.png" />
@@ -41,12 +43,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Images\add.png" />
-    <Resource Include="Images\delete.png" />
     <Resource Include="Images\export.png" />
+    <Resource Include="Images\fileDownload.png" />
     <Resource Include="Images\import.png" />
+    <Resource Include="Images\SummarizedFileDownLoad.png" />
     <Resource Include="Images\test.jpg" />
-    <Resource Include="Images\update.png" />
   </ItemGroup>
 
   <ItemGroup>

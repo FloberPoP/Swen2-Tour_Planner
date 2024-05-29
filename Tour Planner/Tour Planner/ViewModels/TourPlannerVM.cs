@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Microsoft.Extensions.Configuration;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -16,8 +16,6 @@ namespace Tour_Planner.ViewModels
         private static readonly ILog Log = LogManager.GetLogger(typeof(App));
         public TourPlannerVM(ITourService tourService)
         {
-            _tourService = tourService;
-
             AddTourCommand = new RelayCommand(o => AddTour());
             UpdateTourCommand = new RelayCommand(o => UpdateTour());
             DeleteTourCommand = new RelayCommand(o => DeleteTour());
@@ -26,8 +24,196 @@ namespace Tour_Planner.ViewModels
             DeleteTourLogCommand = new RelayCommand(o => DeleteTourLog());
             SaveTourLogCommand = new RelayCommand(o => SaveTourLog());
 
+            TourReportCommand = new RelayCommand(o => TourReport());
+            SummarizedTourReportCommand = new RelayCommand(o => SummarizedTourReport());
+            ExportTourDataCommand = new RelayCommand(o => ExportTourData());
+            ImportTourDataCommand = new RelayCommand(filePath => ImportTourData(filePath));
+
+            _tourService = tourService;
             NewDateTime = DateTime.Now;
             LoadTours();
+        }
+
+        public ICommand TourReportCommand { get; set; }
+        public ICommand SummarizedTourReportCommand { get; set; }
+        public ICommand ExportTourDataCommand { get; set; }
+        public ICommand ImportTourDataCommand { get; set; }
+
+        public ICommand AddTourCommand { get; set; }
+        public ICommand UpdateTourCommand { get; set; }
+        public ICommand DeleteTourCommand { get; set; }
+
+        public ICommand AddTourLogCommand { get; set; }
+        public ICommand DeleteTourLogCommand { get; set; }
+        public ICommand SaveTourLogCommand { get; set; }
+
+        public void TourReport()
+        {
+            if (SelectedTour != null)
+            {
+                SelectedTour.Name = NewTourName;
+                SelectedTour.Description = NewTourDescr;
+                SelectedTour.From = NewTourFrom;
+                SelectedTour.To = NewTourTo;
+                SelectedTour.TransportType = NewTourTransType;
+                SelectedTour.Distance = NewTourDistance;
+                SelectedTour.EstimatedTime = NewTourEstTime;
+                SelectedTour.Img = "PlaceHolder";
+
+                Log.Info($"Dowload TourReport: {SelectedTour.Name}");
+                ReportGenerator.GenerateTourReport( SelectedTour);
+            }
+        }
+
+        public void SummarizedTourReport()
+        {
+            if (SelectedTour != null)
+            {
+                SelectedTour.Name = NewTourName;
+                SelectedTour.Description = NewTourDescr;
+                SelectedTour.From = NewTourFrom;
+                SelectedTour.To = NewTourTo;
+                SelectedTour.TransportType = NewTourTransType;
+                SelectedTour.Distance = NewTourDistance;
+                SelectedTour.EstimatedTime = NewTourEstTime;
+                SelectedTour.Img = "PlaceHolder";
+
+                Log.Info($"Dowload SummarizedTourReport: {SelectedTour.Name}");
+                ReportGenerator.GenerateSummarizeReport(SelectedTour);
+            }
+        }
+        public void ExportTourData()
+        {
+            if (SelectedTour != null)
+            {
+                SelectedTour.Name = NewTourName;
+                SelectedTour.Description = NewTourDescr;
+                SelectedTour.From = NewTourFrom;
+                SelectedTour.To = NewTourTo;
+                SelectedTour.TransportType = NewTourTransType;
+                SelectedTour.Distance = NewTourDistance;
+                SelectedTour.EstimatedTime = NewTourEstTime;
+                SelectedTour.Img = "PlaceHolder";
+
+                ExportImportService.ExportTourToFile(selectedTour);
+                Log.Info($"Export Tour Data: {SelectedTour.Name}");
+            }
+        }
+        public void ImportTourData(object filePath)
+        {
+            string path = filePath as string;
+            if (!string.IsNullOrEmpty(path))
+            {
+                var tmpTour = new Tour();
+                tmpTour = ExportImportService.ImportTourFromFile(path,Tours.ToList());
+                if(tmpTour != null)
+                {
+                    _tourService.AddTour(tmpTour);
+                    Tours.Add(tmpTour);
+                }          
+            }
+            Log.Info($"Importing tour data from: {path}");
+        }
+
+        public void AddTour()
+        {
+            var newTour = new Tour
+            {
+                Name = NewTourName,
+                Description = NewTourDescr,
+                From = NewTourFrom,
+                To = NewTourTo,
+                TransportType = NewTourTransType,
+                Distance = NewTourDistance,
+                EstimatedTime = NewTourEstTime,
+                Img = "PlaceHolder"
+            };
+
+            Log.Info($"Tour Added: {newTour.Name}");
+            _tourService.AddTour(newTour);
+            Tours.Add(newTour);
+        }
+
+        public void UpdateTour()
+        {
+            if (SelectedTour != null)
+            {
+                SelectedTour.Name = NewTourName;
+                SelectedTour.Description = NewTourDescr;
+                SelectedTour.From = NewTourFrom;
+                SelectedTour.To = NewTourTo;
+                SelectedTour.TransportType = NewTourTransType;
+                SelectedTour.Distance = NewTourDistance;
+                SelectedTour.EstimatedTime = NewTourEstTime;
+                SelectedTour.Img = "PlaceHolder";
+
+                Log.Info($"Tour Updated: {SelectedTour.Name}");
+                _tourService.UpdateTour(SelectedTour);
+            }
+        }
+
+        public void DeleteTour()
+        {
+            if (SelectedTour != null)
+            {
+                Log.Info($"Tour Deleted: {SelectedTour.Name}");
+                _tourService.DeleteTour(SelectedTour.Id);
+                Tours.Remove(SelectedTour);
+            }
+        }
+
+        private void LoadTours()
+        {
+            Tours = new ObservableCollection<Tour>(_tourService.GetAllTours());
+            Log.Info($"Tours Loading Count: {Tours.Count()}");
+        }
+       
+
+        public void AddTourLog()
+        {
+            if (TourLogsSelectedTour != null)
+            {
+                var newTourLog = new TourLog
+                {
+                    Tour = TourLogsSelectedTour,
+                    DateTime = NewDateTime,
+                    Comment = NewComment,
+                    Difficulty = NewDifficulty,
+                    TotalDistance = NewTotalDistance,
+                    TotalTime = NewTotalTime,
+                    Rating = NewRating
+                };
+
+                Log.Info($"Adding Tourlog to Tour: {newTourLog.Tour.Name}");
+                TourLogsSelectedTour.TourLogs.Add(newTourLog);
+                _tourService.UpdateTour(TourLogsSelectedTour);
+            }
+        }
+
+        public void DeleteTourLog()
+        {
+            if (SelectedTourLog != null && TourLogsSelectedTour != null)
+            {
+                Log.Info($"Deleting Tourlog from Tour: {SelectedTourLog.Tour.Name}");
+                TourLogsSelectedTour.TourLogs.Remove(SelectedTourLog);
+                _tourService.UpdateTour(TourLogsSelectedTour);
+            }
+        }
+
+        public void SaveTourLog()
+        {
+            if (SelectedTourLog != null && TourLogsSelectedTour != null)
+            {
+                SelectedTourLog.DateTime = NewDateTime;
+                SelectedTourLog.Comment = NewComment;
+                SelectedTourLog.Difficulty = NewDifficulty;
+                SelectedTourLog.TotalDistance = NewTotalDistance;
+                SelectedTourLog.TotalTime = NewTotalTime;
+                SelectedTourLog.Rating = NewRating;
+
+                Log.Info($"Updating Tourlog from Tour: {SelectedTourLog.Tour.Name}");
+                _tourService.UpdateTour(TourLogsSelectedTour);
+            }
         }
 
         public ObservableCollection<Tour> Tours { get; set; }
@@ -144,63 +330,7 @@ namespace Tour_Planner.ViewModels
                 newTourEstTime = value;
                 OnPropertyChanged();
             }
-        }
-
-        public ICommand AddTourCommand { get; set; }
-        public ICommand UpdateTourCommand { get; set; }
-        public ICommand DeleteTourCommand { get; set; }
-
-        public void AddTour()
-        {
-            var newTour = new Tour
-            {
-                Name = NewTourName,
-                Description = NewTourDescr,
-                From = NewTourFrom,
-                To = NewTourTo,
-                TransportType = NewTourTransType,
-                Distance = NewTourDistance,
-                EstimatedTime = NewTourEstTime,
-                Img = "PlaceHolder"
-            };
-
-            Log.Info($"Tour Added: {newTour.Name}");
-            _tourService.AddTour(newTour);
-            Tours.Add(newTour);
-        }
-
-        public void UpdateTour()
-        {
-            if (SelectedTour != null)
-            {
-                SelectedTour.Name = NewTourName;
-                SelectedTour.Description = NewTourDescr;
-                SelectedTour.From = NewTourFrom;
-                SelectedTour.To = NewTourTo;
-                SelectedTour.TransportType = NewTourTransType;
-                SelectedTour.Distance = NewTourDistance;
-                SelectedTour.EstimatedTime = NewTourEstTime;
-                SelectedTour.Img = "PlaceHolder";
-
-                Log.Info($"Tour Updated: {SelectedTour.Name}");
-                _tourService.UpdateTour(SelectedTour);              
-            }
-        }
-
-        public void DeleteTour()
-        {
-            if (SelectedTour != null)
-            {
-                Log.Info($"Tour Deleted: {SelectedTour.Name}");
-                _tourService.DeleteTour(SelectedTour.Id);
-                Tours.Remove(SelectedTour);
-            }
-        }
-        private void LoadTours()
-        {
-            Tours = new ObservableCollection<Tour>(_tourService.GetAllTours());
-            Log.Info($"Tours Loading Count: {Tours.Count()}");
-        }
+        }        
 
         private Tour tourLogsSelectedTour;
         public Tour TourLogsSelectedTour
@@ -312,57 +442,6 @@ namespace Tour_Planner.ViewModels
             {
                 newrating = value;
                 OnPropertyChanged();
-            }
-        }
-
-        public ICommand AddTourLogCommand { get; set; }
-        public ICommand DeleteTourLogCommand { get; set; }
-        public ICommand SaveTourLogCommand { get; set; }
-
-        public void AddTourLog()
-        {
-            if (TourLogsSelectedTour != null)
-            {
-                var newTourLog = new TourLog
-                {
-                    Tour = TourLogsSelectedTour,
-                    DateTime = NewDateTime,
-                    Comment = NewComment,
-                    Difficulty = NewDifficulty,
-                    TotalDistance = NewTotalDistance,
-                    TotalTime = NewTotalTime,
-                    Rating = NewRating                   
-                };
-
-                Log.Info($"Adding Tourlog to Tour: {newTourLog.Tour.Name}");
-                TourLogsSelectedTour.TourLogs.Add(newTourLog);
-                _tourService.UpdateTour(TourLogsSelectedTour);
-            }
-        }
-
-        public void DeleteTourLog()
-        {
-            if (SelectedTourLog != null && TourLogsSelectedTour != null)
-            {
-                Log.Info($"Deleting Tourlog from Tour: {SelectedTourLog.Tour.Name}");
-                TourLogsSelectedTour.TourLogs.Remove(SelectedTourLog);
-                _tourService.UpdateTour(TourLogsSelectedTour);
-            }
-        }
-
-        public void SaveTourLog()
-        {
-            if (SelectedTourLog != null && TourLogsSelectedTour != null)
-            {
-                SelectedTourLog.DateTime = NewDateTime;
-                SelectedTourLog.Comment = NewComment;
-                SelectedTourLog.Difficulty = NewDifficulty;
-                SelectedTourLog.TotalDistance = NewTotalDistance;
-                SelectedTourLog.TotalTime = NewTotalTime;
-                SelectedTourLog.Rating = NewRating;
-
-                Log.Info($"Updating Tourlog from Tour: {SelectedTourLog.Tour.Name}");
-                _tourService.UpdateTour(TourLogsSelectedTour);
             }
         }
 
