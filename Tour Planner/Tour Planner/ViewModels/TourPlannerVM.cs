@@ -104,15 +104,23 @@ namespace Tour_Planner.ViewModels
             string path = filePath as string;
             if (!string.IsNullOrEmpty(path))
             {
-                var tmpTour = new Tour();
-                tmpTour = ExportImportService.ImportTourFromFile(path,Tours.ToList());
-                if(tmpTour != null)
+                var tmpTour = ExportImportService.ImportTourFromFile(path, Tours.ToList());
+                if (tmpTour != null)
                 {
-                    _tourService.AddTour(tmpTour);
-                    Tours.Add(tmpTour);
-                }          
-            }
-            Log.Info($"Importing tour data from: {path}");
+                    // Ensure Tours collection is not null
+                    if (Tours != null)
+                    {
+                        Log.Info($"Importing tour data from: {path}");
+                        Log.Info($"---{tmpTour.Name},{tmpTour.Id}---");
+                        _tourService.AddTour(tmpTour);
+                        Tours.Add(tmpTour);                   
+                    }
+                    else
+                    {
+                        Log.Info("Tours collection is not initialized.");
+                    }
+                }
+            }     
         }
 
         public void AddTour()
@@ -165,6 +173,7 @@ namespace Tour_Planner.ViewModels
         private void LoadTours()
         {
             Tours = new ObservableCollection<Tour>(_tourService.GetAllTours());
+            foreach (Tour tour in Tours) { Log.Info(tour.Name+": "+tour.Id); }
             Log.Info($"Tours Loading Count: {Tours.Count()}");
         }
        

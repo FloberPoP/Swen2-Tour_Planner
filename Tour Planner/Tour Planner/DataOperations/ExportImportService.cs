@@ -51,63 +51,37 @@ public class ExportImportService
             // Deserialize the JSON to a Tour object
             Tour importedTour = JsonConvert.DeserializeObject<Tour>(json);
 
-            // Check if a tour with the same ID already exists
-            Tour existingTour = TourExists(importedTour, tours);
+            foreach (var tour in tours)
+            {
+                if (tour.Id == importedTour.Id)
+                {
+                    Log.Info($"Same Tour with ID {importedTour.Id} already exists. Skipping import.");
+                    return null;
+                }
+            }
 
-            if (existingTour != null)
+            // Check for existing TourLogs with the same ID
+            foreach (var tourLog in importedTour.TourLogs)
             {
-                Log.Info($"Same Tour with ID {importedTour.Id} already exists. Skipping import.");
-                return null;
+                foreach (var tour in tours)
+                {
+                    foreach (var existingTourLog in tour.TourLogs)
+                    {
+                        if (existingTourLog.Id == tourLog.Id)
+                        {
+                            Log.Info($"Same TourLog with ID {tourLog.Id} already exists. Skipping import.");
+                            return null;
+                        }
+                    }
+                }
             }
-            else
-            {
-                // Tour can be imported, return it
-                return importedTour;
-            }
+
+            return importedTour;
         }
         catch (Exception ex)
         {
             Log.Info($"An error occurred while importing tour from file: {ex.Message}");
             return null;
         }
-    }
-    private static int GenerateNewId()
-    {
-        return Guid.NewGuid().GetHashCode();
-    }
-    private static Tour TourExists(Tour importedTour, List<Tour> tours)
-    {
-        foreach (var tour in tours)
-        {
-            if (tour.Id == importedTour.Id)
-            {
-                if (AreToursEqual(importedTour, tour))
-                {
-                    // Same tour already exists, return null
-                    return null;
-                }
-                else
-                {
-                    // Same ID but different data, generate new ID
-                    importedTour.Id = GenerateNewId();
-                    return importedTour;
-                }
-            }
-        }
-
-        // Tour with the same ID doesn't exist
-        return null;
-    }
-
-    private static bool AreToursEqual(Tour tour1, Tour tour2)
-    {        
-        return tour1.Name == tour2.Name &&
-               tour1.Description == tour2.Description &&
-               tour1.From == tour2.From &&
-               tour1.To == tour2.To &&
-               tour1.TransportType == tour2.TransportType &&
-               tour1.Distance == tour2.Distance &&
-               tour1.EstimatedTime == tour2.EstimatedTime &&
-               tour1.Img == tour2.Img;
     }
 }
