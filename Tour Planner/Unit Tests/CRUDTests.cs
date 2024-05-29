@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Tour_Planner.BL;
 using Tour_Planner.DAL;
 using Tour_Planner.Models;
 using Tour_Planner.ViewModels;
@@ -10,7 +9,6 @@ namespace UnitTests
     public class TourPlannerVMTests
     {
         private TourPlannerVM tourPlannerVM;
-        private readonly ITourService _tourService;
 
         [TestInitialize]
         public void SetUp()
@@ -22,9 +20,8 @@ namespace UnitTests
 
             // Create instance of TourContext with in-memory database options
             TourContext context = new TourContext(options);
-            TourRepository repository = new TourRepository(context);
-            ITourService _tourService = new TourService(repository);
-            tourPlannerVM = new TourPlannerVM(_tourService);
+            ITourRepository tourRepository = new TourRepository(context);
+            tourPlannerVM = new TourPlannerVM(tourRepository);
         }
 
         [TestMethod]
