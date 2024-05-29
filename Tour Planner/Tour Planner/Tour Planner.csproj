@@ -16,7 +16,7 @@
     <None Remove="import.png" />
     <None Remove="test.jpg" />
     <None Remove="update.png" />
-	<None Update="appsettings.json">
+	<None Update="configuration\appsettings.json">
 		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	</None>
   </ItemGroup>
@@ -50,8 +50,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="appsettings\appsettings.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <None Update="configuration\appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="configuration\log4net.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 

@@ -1,15 +1,17 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.IO;
+using System.Windows;
+using log4net;
+using log4net.Config;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.IO;
-using System.Linq;
-using System.Windows;
 using Tour_Planner.BL;
+using Tour_Planner.DAL;
 using Tour_Planner.Models;
 
-namespace Tour_Planner.DAL
+namespace Tour_Planner
 {
     public partial class App : Application
     {
@@ -19,8 +21,8 @@ namespace Tour_Planner.DAL
         public App()
         {
             var builder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings\\appsettings.json", optional: false, reloadOnChange: true);
+                .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+                .AddJsonFile("configuration\\appsettings.json", optional: false, reloadOnChange: true);
 
             Configuration = builder.Build();
 
@@ -32,18 +34,21 @@ namespace Tour_Planner.DAL
                     services.AddScoped<ITourRepository, TourRepository>();
                     services.AddScoped<ITourService, TourService>();
                     services.AddSingleton<MainWindow>();
-
                 })
                 .Build();
+
+            var log4netConfigFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Configuration["log4net:fileName"]);
+            var log4netConfig = new FileInfo(log4netConfigFilePath);
+            XmlConfigurator.ConfigureAndWatch(log4netConfig);
         }
 
         protected override void OnStartup(StartupEventArgs e)
         {
+            base.OnStartup(e);
             _host.Start();
             SeedDatabase();
             var mainWindow = _host.Services.GetRequiredService<MainWindow>();
             mainWindow.Show();
-            base.OnStartup(e);
         }
 
         protected override void OnExit(ExitEventArgs e)

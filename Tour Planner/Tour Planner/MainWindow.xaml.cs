@@ -32,6 +32,7 @@ namespace Tour_Planner
             {
                 Tour selectedTour = tourListBox.SelectedItem as Tour;
                 (DataContext as TourPlannerVM).SelectedTour = selectedTour;
+                Log.Info($"Tour selected: {selectedTour.Name}");
             }
         }
 
