@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using log4net.Config;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -20,7 +21,7 @@ namespace Tour_Planner.DAL
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings\\appsettings.json", optional: false, reloadOnChange: true);
+                .AddJsonFile("confsettings\\appsettings.json", optional: false, reloadOnChange: true);
 
             Configuration = builder.Build();
 
@@ -35,6 +36,10 @@ namespace Tour_Planner.DAL
 
                 })
                 .Build();
+
+            var log4netConfigFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Configuration["log4net:fileName"]);
+            var log4netConfig = new FileInfo(log4netConfigFilePath);
+            XmlConfigurator.ConfigureAndWatch(log4netConfig);
         }
 
         protected override void OnStartup(StartupEventArgs e)

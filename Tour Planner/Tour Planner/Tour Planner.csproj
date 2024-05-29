@@ -50,8 +50,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="appsettings\appsettings.json">
+    <None Update="confsettings\appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="confsettings\log4net.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 

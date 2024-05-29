@@ -5,13 +5,15 @@ using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Tour_Planner.Models;
 using Tour_Planner.BL;
+using log4net;
+using Tour_Planner.DAL;
 
 namespace Tour_Planner.ViewModels
 {
     public class TourPlannerVM : INotifyPropertyChanged
     {
         private readonly ITourService _tourService;
-
+        private static readonly ILog Log = LogManager.GetLogger(typeof(App));
         public TourPlannerVM(ITourService tourService)
         {
             _tourService = tourService;
@@ -161,6 +163,8 @@ namespace Tour_Planner.ViewModels
                 EstimatedTime = NewTourEstTime,
                 Img = "PlaceHolder"
             };
+
+            Log.Info($"Tour Added: {newTour.Name}");
             _tourService.AddTour(newTour);
             Tours.Add(newTour);
         }
@@ -178,6 +182,7 @@ namespace Tour_Planner.ViewModels
                 SelectedTour.EstimatedTime = NewTourEstTime;
                 SelectedTour.Img = "PlaceHolder";
 
+                Log.Info($"Tour Updated: {SelectedTour.Name}");
                 _tourService.UpdateTour(SelectedTour);              
             }
         }
@@ -186,6 +191,7 @@ namespace Tour_Planner.ViewModels
         {
             if (SelectedTour != null)
             {
+                Log.Info($"Tour Deleted: {SelectedTour.Name}");
                 _tourService.DeleteTour(SelectedTour.Id);
                 Tours.Remove(SelectedTour);
             }
@@ -193,6 +199,7 @@ namespace Tour_Planner.ViewModels
         private void LoadTours()
         {
             Tours = new ObservableCollection<Tour>(_tourService.GetAllTours());
+            Log.Info($"Tours Loading Count: {Tours.Count()}");
         }
 
         private Tour tourLogsSelectedTour;
@@ -327,6 +334,7 @@ namespace Tour_Planner.ViewModels
                     Rating = NewRating                   
                 };
 
+                Log.Info($"Adding Tourlog to Tour: {newTourLog.Tour.Name}");
                 TourLogsSelectedTour.TourLogs.Add(newTourLog);
                 _tourService.UpdateTour(TourLogsSelectedTour);
             }
@@ -336,6 +344,7 @@ namespace Tour_Planner.ViewModels
         {
             if (SelectedTourLog != null && TourLogsSelectedTour != null)
             {
+                Log.Info($"Deleting Tourlog from Tour: {SelectedTourLog.Tour.Name}");
                 TourLogsSelectedTour.TourLogs.Remove(SelectedTourLog);
                 _tourService.UpdateTour(TourLogsSelectedTour);
             }
@@ -352,6 +361,7 @@ namespace Tour_Planner.ViewModels
                 SelectedTourLog.TotalTime = NewTotalTime;
                 SelectedTourLog.Rating = NewRating;
 
+                Log.Info($"Updating Tourlog from Tour: {SelectedTourLog.Tour.Name}");
                 _tourService.UpdateTour(TourLogsSelectedTour);
             }
         }
