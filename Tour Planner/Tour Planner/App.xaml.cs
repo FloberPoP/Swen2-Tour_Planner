@@ -73,25 +73,61 @@ namespace Tour_Planner.DAL
             {
                 context.Tours.Add(new Tour
                 {
-                    Name = "Tour 1",
-                    Description = "Description of Tour 1",
-                    From = "Start Location",
-                    To = "End Location",
-                    TransportType = "Transport Type",
-                    Distance = 100,
-                    EstimatedTime = 120,
+                    Name = "Mittagspause",
+                    Description = "Tour von da HTL zum Mci",
+                    From = "Hammerweg 1, 3910 Zwettl",
+                    To = "Andre Freyskorn Str. 2, 3910 Zwettl",
+                    TransportType = "Car",
+                    Distance = 0,
+                    EstimatedTime = 0,
                     Img = "tour1.jpg"
                 });
 
                 context.Tours.Add(new Tour
                 {
-                    Name = "Tour 2",
-                    Description = "Description of Tour 2",
-                    From = "Start Location",
-                    To = "End Location",
-                    TransportType = "Transport Type",
-                    Distance = 200,
-                    EstimatedTime = 230,
+                    Name = "Arbeitsweg",
+                    Description = "Jürgens Arbeitsweg im Sommer",
+                    From = "Gröblingerstraße 366, 3920 Groß Gerungs",
+                    To = "Kreuzberg 107, 3920 Groß Gerungs",
+                    TransportType = "Car",
+                    Distance = 0,
+                    EstimatedTime = 0,
+                    Img = "tour2.jpg"
+                });
+
+                context.Tours.Add(new Tour
+                {
+                    Name = "Einkaufstour",
+                    Description = "Shoppen zum Pfeiffer-Vogl idk",
+                    From = "Arbesbach 224",
+                    To = "Arbesbach 64",
+                    TransportType = "Walk",
+                    Distance = 0,
+                    EstimatedTime = 0,
+                    Img = "tour2.jpg"
+                });
+
+                context.Tours.Add(new Tour
+                {
+                    Name = "FH-Weg",
+                    Description = "Meine Wohnung zur FH",
+                    From = "Aignerstraße 6, 1200 Wien",
+                    To = "Höchstädtpl. 6, 1200 Wien",
+                    TransportType = "Walk",
+                    Distance = 0,
+                    EstimatedTime = 0,
+                    Img = "tour2.jpg"
+                });
+
+                context.Tours.Add(new Tour
+                {
+                    Name = "LOCO-SQUAD",
+                    Description = "GEMMA LOCO?!",
+                    From = "Aignerstraße 6, 1200 Wien",
+                    To = "Loco-Bar",
+                    TransportType = "Car",
+                    Distance = 0,
+                    EstimatedTime = 0,
                     Img = "tour2.jpg"
                 });
 
@@ -106,11 +142,11 @@ namespace Tour_Planner.DAL
                 {
                     Tour = tour,
                     DateTime = DateTime.Now,
-                    Comment = "First tour log",
+                    Comment = "First time mci, owa umweg beim keskin",
                     Difficulty = "Medium",
-                    TotalDistance = "50 km",
-                    TotalTime = "2 hours",
-                    Rating = 4
+                    TotalDistance = "3500",
+                    TotalTime = "10800",
+                    Rating = 8
                 });
 
                 context.SaveChanges();

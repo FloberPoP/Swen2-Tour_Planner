@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tour_Planner.Models
+namespace Tour_Planner.BL.GeoLocationAPI
 {
     public class GeoSearchResponse
     {

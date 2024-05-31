@@ -52,7 +52,7 @@
             <Label Grid.Row="5" Grid.Column="0" Foreground="White">Total Time:</Label>
             <TextBox x:Name="TotalTimeTextBox" Grid.Row="5" Grid.Column="1" Text="{Binding NewTotalTime, Mode=TwoWay}"/>
 
-            <Label Grid.Row="6" Grid.Column="0" Foreground="White">Rating:</Label>
+            <Label Grid.Row="6" Grid.Column="0" Foreground="White">Rating ( X / 10 )</Label>
             <TextBox x:Name="RatingTextBox" Grid.Row="6" Grid.Column="1" Text="{Binding NewRating, Mode=TwoWay}"/>
 
         </Grid>

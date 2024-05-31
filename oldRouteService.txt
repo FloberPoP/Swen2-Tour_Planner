@@ -1,0 +1,104 @@
+using System.Globalization;
+using System.Net.Http;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Tour_Planner.BL.GeoLocationAPI;
+
+namespace Tour_Planner.BL
+{
+    public class RouteService
+    {
+        private readonly HttpClient _httpClient = new HttpClient();
+        private readonly string _apiKey = "5b3ce3597851110001cf6248d157c6099b64438e81765a43f9ecc90b";
+        private readonly string _urlSearchGeocode = "https://api.openrouteservice.org/geocode/search";
+        private readonly string _urlDirections = "https://api.openrouteservice.org/v2/directions/";
+
+        public RouteService() { }
+
+
+        static Dictionary<string, string> TransportDictionary = new()
+        {
+            {"Walk", "foot-walking"},
+            {"Bike", "cycling-regular"},
+            {"Car", "driving-car"}
+        };
+
+        public async Task<(string, CalculatedRouteResponse)> GetDirections(string address1, string address2, string transportation)
+        {
+            try
+            {
+                //                 [Long, Lat]
+                // Arbesbach 224 = [14.954005, 48.49494]
+                var coordinatesA = await GeocodeAddress(_urlSearchGeocode, _apiKey, address1);
+                // Gröblingerstraße 366 = [14.962661, 48.575455]
+                var coordinatesB = await GeocodeAddress(_urlSearchGeocode, _apiKey, address2);
+
+                // ruine [14.961027, 48.49417]
+
+                var transportType = TransportDictionary.ContainsKey(transportation) ? TransportDictionary[transportation] : TransportDictionary["Car"];
+
+                if (coordinatesA != null && coordinatesB != null)
+                {
+                    string formattedStart = $"{coordinatesA[0].ToString(CultureInfo.InvariantCulture)},{coordinatesA[1].ToString(CultureInfo.InvariantCulture)}";
+                    string formattedEnd = $"{coordinatesB[0].ToString(CultureInfo.InvariantCulture)},{coordinatesB[1].ToString(CultureInfo.InvariantCulture)}";
+                    string requestUrl = $"{_urlDirections}{transportType}?api_key={_apiKey}&start={formattedStart}&end={formattedEnd}";
+                    Console.WriteLine($"Requesting directions with URL: {requestUrl}");
+                    HttpResponseMessage response = await _httpClient.GetAsync(requestUrl);
+                    response.EnsureSuccessStatusCode();
+                    string responseBody = await response.Content.ReadAsStringAsync();
+
+                    return (responseBody, JsonConvert.DeserializeObject<CalculatedRouteResponse>(responseBody));
+                }
+
+                else
+                {
+                    return (null, null);
+                }
+            }
+
+            catch (HttpRequestException e)
+            {
+                Console.WriteLine($"An error occurred: {e.Message}");
+                return (null, null);
+            }
+        }
+
+        private async Task<List<double>> GeocodeAddress(string baseUrl, string apiKey, string address)
+        {
+            string requestUrl = $"{baseUrl}?api_key={apiKey}&text={Uri.EscapeDataString(address)}";
+            Console.WriteLine($"Requesting geocode with URL: {requestUrl}");
+            HttpResponseMessage response = await _httpClient.GetAsync(requestUrl);
+            if (!response.IsSuccessStatusCode)
+            {
+                Console.WriteLine($"Failed to geocode '{address}': {response.StatusCode} {await response.Content.ReadAsStringAsync()}");
+                return null;
+            }
+
+            string responseBody = await response.Content.ReadAsStringAsync();
+
+            var geocodeData = JsonConvert.DeserializeObject<GeoSearchResponse>(responseBody);
+            if (geocodeData.Features != null && geocodeData.Features.Count > 0)
+            {
+                return geocodeData.Features[0].Geometry.Coordinates;
+            }
+            else
+            { 
+                return null;
+            }
+        }
+
+        public async Task<(double Longitude, double Latitude)> GetCoordinates(string address)
+        {
+            var coordinates = await GeocodeAddress(_urlSearchGeocode, _apiKey, address);
+            if (coordinates != null && coordinates.Count == 2)
+            {
+                return (Longitude: coordinates[0], Latitude: coordinates[1]);
+            }
+            else
+            {
+                throw new Exception("Unable to geocode address.");
+            }
+        }
+    }
+}

@@ -7,13 +7,23 @@ using Tour_Planner.Models;
 using Tour_Planner.BL;
 using log4net;
 using Tour_Planner.DAL;
+using System.Windows;
+using Tour_Planner.BL.GeoLocationAPI;
+using iTextSharp.text.pdf.codec;
+using System.Windows.Media.Imaging;
+using static Tour_Planner.BL.GeoLocationAPI.CalculatedRouteResponse;
+using System.IO;
+using System.Text;
+using Microsoft.Web.WebView2.WinForms;
 
 namespace Tour_Planner.ViewModels
 {
     public class TourPlannerVM : INotifyPropertyChanged
     {
         private readonly ITourService _tourService;
+        private readonly RouteService _routeService;
         private static readonly ILog Log = LogManager.GetLogger(typeof(App));
+
         public TourPlannerVM(ITourService tourService)
         {
             AddTourCommand = new RelayCommand(o => AddTour());
@@ -24,15 +34,109 @@ namespace Tour_Planner.ViewModels
             DeleteTourLogCommand = new RelayCommand(o => DeleteTourLog());
             SaveTourLogCommand = new RelayCommand(o => SaveTourLog());
 
-            TourReportCommand = new RelayCommand(o => TourReport());
-            SummarizedTourReportCommand = new RelayCommand(o => SummarizedTourReport());
-            ExportTourDataCommand = new RelayCommand(o => ExportTourData());
+            TourReportCommand = new RelayCommand(o => { TourReport(); ShowPopup("Information for Single-Tour-Report"); });
+            SummarizedTourReportCommand = new RelayCommand(o => { SummarizedTourReport(); ShowPopup("Information for Summarized Tour Report"); });
+            ExportTourDataCommand = new RelayCommand(o => { ExportTourData(); ShowPopup("Information for Export Tour Data"); });
             ImportTourDataCommand = new RelayCommand(filePath => ImportTourData(filePath));
 
             _tourService = tourService;
+            _routeService = new RouteService();
+
             NewDateTime = DateTime.Now;
             LoadTours();
         }
+
+        private void ShowPopup(string message)
+        {
+            MessageBox.Show(message, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private string imageUrl;
+        public string ImageUrl
+        {
+            get
+            {
+                return imageUrl;
+            }
+            set
+            {
+                imageUrl = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private async void GetRouteInfo()
+        {
+            if (SelectedTour != null)
+            {
+                var (responseBody, routeResponse) = await _routeService.GetRoute(SelectedTour.From, SelectedTour.To, SelectedTour.TransportType);
+
+                string filePath = "Resources/directions.js";
+
+                string newJsonDirection = "var directions = " + responseBody.ToString();
+
+                // Override the directions.js-File
+                try
+                {
+                    await File.WriteAllTextAsync(filePath, newJsonDirection, Encoding.UTF8);
+                }
+
+                catch (IOException e)
+                {
+                    Console.WriteLine($"Fehler beim Schreiben der Datei: {e.Message}");
+                }
+
+                if (routeResponse != null && routeResponse.Features != null && routeResponse.Features.Count > 0)
+                {
+                    var firstFeature = routeResponse.Features[0];
+                    var coordinates = firstFeature.Geometry.Coordinates;
+                    var summary = firstFeature.Properties.Summary;
+
+                    //string message = $"Distance: {summary.Distance} meters\nDuration: {summary.Duration} seconds";
+                    //MessageBox.Show(message);
+
+                    NewTourDistance = (int)summary.Distance;
+                    NewTourEstTime = (int)summary.Duration;
+
+                    //ImageUrl = await ConstructMapUrl(SelectedTour.From, SelectedTour.To);
+                    //SelectedTour.Img = ImageUrl;
+                }
+
+                else
+                {
+                    NewTourDistance = 0;
+                    NewTourEstTime = 0;
+                }
+            }
+        }
+
+        /*
+        // Construct the map with the Long-Lat-Coords
+        // Basically only needed for Single-Report-Generation ("Image")
+        private async Task<string> ConstructMapUrl(string address1, string address2)
+        {
+            var startCoordinates = await _routeService.GetCoordinates(address1);
+            var endCoordinates = await _routeService.GetCoordinates(address2);
+
+            string baseUrl = "https://tile.openstreetmap.org/{0}/{1}/{2}.png";
+            int zoomLevel = 14;
+
+            // Calculate the center coordinates between the start and end points
+            double centerLat = (startCoordinates.Latitude + endCoordinates.Latitude) / 2;
+            double centerLon = (startCoordinates.Longitude + endCoordinates.Longitude) / 2;
+
+            // Calculate the tile coordinates for the center
+            int xTile = (int)((centerLon + 180) / 360 * (1 << zoomLevel));
+            int yTile = (int)((1 - Math.Log(Math.Tan(centerLat * Math.PI / 180) + 1 / Math.Cos(centerLat * Math.PI / 180)) / Math.PI) / 2 * (1 << zoomLevel));
+
+            string mapUrl = string.Format(baseUrl, zoomLevel, xTile, yTile);
+
+            Console.WriteLine($"Center Tile Coordinates: xTile={xTile}, yTile={yTile}");
+            Console.WriteLine($"Map URL: {mapUrl}");
+
+            return mapUrl;
+        }
+        */
 
         public ICommand TourReportCommand { get; set; }
         public ICommand SummarizedTourReportCommand { get; set; }
@@ -58,13 +162,11 @@ namespace Tour_Planner.ViewModels
                 SelectedTour.TransportType = NewTourTransType;
                 SelectedTour.Distance = NewTourDistance;
                 SelectedTour.EstimatedTime = NewTourEstTime;
-                SelectedTour.Img = "PlaceHolder";
 
-                Log.Info($"Dowload TourReport: {SelectedTour.Name}");
-                ReportGenerator.GenerateTourReport( SelectedTour);
+                Log.Info($"Download TourReport: {SelectedTour.Name}");
+                ReportGenerator.GenerateTourReport(SelectedTour);
             }
         }
-
         public void SummarizedTourReport()
         {
             if (SelectedTour != null)
@@ -76,9 +178,8 @@ namespace Tour_Planner.ViewModels
                 SelectedTour.TransportType = NewTourTransType;
                 SelectedTour.Distance = NewTourDistance;
                 SelectedTour.EstimatedTime = NewTourEstTime;
-                SelectedTour.Img = "PlaceHolder";
 
-                Log.Info($"Dowload SummarizedTourReport: {SelectedTour.Name}");
+                Log.Info($"Download SummarizedTourReport: {SelectedTour.Name}");
                 ReportGenerator.GenerateSummarizeReport(SelectedTour);
             }
         }
@@ -93,7 +194,6 @@ namespace Tour_Planner.ViewModels
                 SelectedTour.TransportType = NewTourTransType;
                 SelectedTour.Distance = NewTourDistance;
                 SelectedTour.EstimatedTime = NewTourEstTime;
-                SelectedTour.Img = "PlaceHolder";
 
                 ExportImportService.ExportTourToFile(selectedTour);
                 Log.Info($"Export Tour Data: {SelectedTour.Name}");
@@ -107,7 +207,6 @@ namespace Tour_Planner.ViewModels
                 var tmpTour = ExportImportService.ImportTourFromFile(path, Tours.ToList());
                 if (tmpTour != null)
                 {
-                    // Ensure Tours collection is not null
                     if (Tours != null)
                     {
                         Log.Info($"Importing tour data from: {path}");
@@ -115,6 +214,7 @@ namespace Tour_Planner.ViewModels
                         _tourService.AddTour(tmpTour);
                         Tours.Add(tmpTour);                   
                     }
+
                     else
                     {
                         Log.Info("Tours collection is not initialized.");
@@ -122,7 +222,6 @@ namespace Tour_Planner.ViewModels
                 }
             }     
         }
-
         public void AddTour()
         {
             var newTour = new Tour
@@ -141,7 +240,6 @@ namespace Tour_Planner.ViewModels
             _tourService.AddTour(newTour);
             Tours.Add(newTour);
         }
-
         public void UpdateTour()
         {
             if (SelectedTour != null)
@@ -159,7 +257,6 @@ namespace Tour_Planner.ViewModels
                 _tourService.UpdateTour(SelectedTour);
             }
         }
-
         public void DeleteTour()
         {
             if (SelectedTour != null)
@@ -169,15 +266,12 @@ namespace Tour_Planner.ViewModels
                 Tours.Remove(SelectedTour);
             }
         }
-
         private void LoadTours()
         {
             Tours = new ObservableCollection<Tour>(_tourService.GetAllTours());
             foreach (Tour tour in Tours) { Log.Info(tour.Name+": "+tour.Id); }
             Log.Info($"Tours Loading Count: {Tours.Count()}");
         }
-       
-
         public void AddTourLog()
         {
             if (TourLogsSelectedTour != null)
@@ -198,7 +292,6 @@ namespace Tour_Planner.ViewModels
                 _tourService.UpdateTour(TourLogsSelectedTour);
             }
         }
-
         public void DeleteTourLog()
         {
             if (SelectedTourLog != null && TourLogsSelectedTour != null)
@@ -208,7 +301,6 @@ namespace Tour_Planner.ViewModels
                 _tourService.UpdateTour(TourLogsSelectedTour);
             }
         }
-
         public void SaveTourLog()
         {
             if (SelectedTourLog != null && TourLogsSelectedTour != null)
@@ -243,9 +335,10 @@ namespace Tour_Planner.ViewModels
                     NewTourFrom = selectedTour.From;
                     NewTourTo = selectedTour.To;
                     NewTourTransType = selectedTour.TransportType;
-                    NewTourDistance = selectedTour.Distance;
-                    NewTourEstTime = selectedTour.EstimatedTime;
+
+                    GetRouteInfo();
                 }
+
                 else
                 {
                     ClearTourFields();

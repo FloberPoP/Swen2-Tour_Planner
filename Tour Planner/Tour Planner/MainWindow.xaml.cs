@@ -23,8 +23,18 @@ namespace Tour_Planner
             Log.Info("Application starting...");
 
             InitializeComponent();
+            InitializeAsync();
             _tourService = tourService;
             DataContext = new TourPlannerVM(_tourService);
+        }
+
+        protected async void InitializeAsync()
+        {
+            await webView.EnsureCoreWebView2Async(null);
+            // Assuming "example.html" is at the root of your project directory and set to "Copy to Output Directory"
+            string appDir = AppDomain.CurrentDomain.BaseDirectory;
+            string filePath = System.IO.Path.Combine(appDir, "Resources/leaflet.html");
+            webView.CoreWebView2.Navigate(filePath);
         }
 
         private void TourListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -62,6 +72,11 @@ namespace Tour_Planner
         private void HamburgerMenu_Unchecked(object sender, RoutedEventArgs e)
         {
             menuItemsPanel.Visibility = Visibility.Collapsed;
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            InitializeAsync();
         }
     }
 }

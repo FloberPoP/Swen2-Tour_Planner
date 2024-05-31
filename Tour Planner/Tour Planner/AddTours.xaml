@@ -50,10 +50,10 @@
             <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding NewTourTransType}"/>
 
             <Label Grid.Row="5" Grid.Column="0" Foreground="White">Distance:</Label>
-            <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding NewTourDistance}"/>
+            <TextBox IsEnabled="False" Grid.Row="5" Grid.Column="1" Text="{Binding NewTourDistance}"/>
 
             <Label Grid.Row="6" Grid.Column="0" Foreground="White">Estimated Time:</Label>
-            <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding NewTourEstTime}"/>
+            <TextBox IsEnabled="False" Grid.Row="6" Grid.Column="1" Text="{Binding NewTourEstTime}"/>
 
             <!-- Route information (IMG) -->
         </Grid>
