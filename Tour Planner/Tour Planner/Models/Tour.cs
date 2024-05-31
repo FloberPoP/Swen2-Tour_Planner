@@ -4,6 +4,14 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Tour_Planner.Models
 {
+    public enum TransportType
+    {
+        Walk,
+        Bicycle,
+        Car,
+        None
+    }
+
     public class Tour : INotifyPropertyChanged
     {
         private ObservableCollection<TourLog> tourLogs;
@@ -42,7 +50,21 @@ namespace Tour_Planner.Models
         public string Description { get; set; }
         public string From { get; set; }
         public string To { get; set; }
-        public string TransportType { get; set; }
+
+        private TransportType transportType;
+        public TransportType TransportType
+        {
+            get { return transportType; }
+            set
+            {
+                if (transportType != value)
+                {
+                    transportType = value;
+                    OnPropertyChanged(nameof(TransportType));
+                }
+            }
+        }
+
         public int Distance { get; set; }
         public int EstimatedTime { get; set; }
         public string Img { get; set; }

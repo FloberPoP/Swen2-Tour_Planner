@@ -352,7 +352,7 @@ namespace Tour_Planner.ViewModels
             NewTourDescr = string.Empty;
             NewTourFrom = string.Empty;
             NewTourTo = string.Empty;
-            NewTourTransType = string.Empty;
+            NewTourTransType = TransportType.None;
             NewTourDistance = 0;
             NewTourEstTime = 0;
         }
@@ -401,8 +401,8 @@ namespace Tour_Planner.ViewModels
             }
         }
 
-        private string newTourTransType;
-        public string NewTourTransType
+        private TransportType newTourTransType;
+        public TransportType NewTourTransType
         {
             get { return newTourTransType; }
             set

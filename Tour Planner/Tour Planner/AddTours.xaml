@@ -3,9 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:converters="clr-namespace:Tour_Planner.Converters"
+             xmlns:models="clr-namespace:Tour_Planner.Models"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
-  
+    <UserControl.Resources>
+        <converters:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
+    </UserControl.Resources>
     <Grid Background="#333">
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
@@ -47,8 +51,11 @@
             <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding NewTourTo}"/>
 
             <Label Grid.Row="4" Grid.Column="0" Foreground="White">Transport Type:</Label>
-            <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding NewTourTransType}"/>
-
+            <ComboBox Grid.Row="3" Grid.Column="1" SelectedItem="{Binding NewTourTransType, Mode=TwoWay}">
+                <ComboBoxItem Content="Walk" IsSelected="{Binding NewTourTransType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static models:TransportType.Walk}}"/>
+                <ComboBoxItem Content="Bicycle" IsSelected="{Binding NewTourTransType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static models:TransportType.Bicycle}}"/>
+                <ComboBoxItem Content="Car" IsSelected="{Binding NewTourTransType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static models:TransportType.Car}}"/>
+            </ComboBox>
             <Label Grid.Row="5" Grid.Column="0" Foreground="White">Distance:</Label>
             <TextBox IsEnabled="False" Grid.Row="5" Grid.Column="1" Text="{Binding NewTourDistance}"/>
 

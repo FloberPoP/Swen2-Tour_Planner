@@ -1,9 +1,11 @@
 ﻿using System.Globalization;
+using System.Net;
 using System.Net.Http;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Tour_Planner.BL.GeoLocationAPI;
+using Tour_Planner.Models;
 
 namespace Tour_Planner.BL
 {
@@ -16,11 +18,11 @@ namespace Tour_Planner.BL
 
         public RouteService() { }
 
-        static Dictionary<string, string> TransportDictionary = new()
+        static Dictionary<Models.TransportType, string> TransportDictionary = new()
         {
-            {"Walk", "foot-walking"},
-            {"Bicycle", "cycling-regular"},
-            {"Car", "driving-car"}
+            {Models.TransportType.Walk, "foot-walking"},
+            {Models.TransportType.Bicycle, "cycling-regular"},
+            {Models.TransportType.Car, "driving-car"}
         };
 
         private async Task<string> GetGeocode(string url, string apiKey, string address)
@@ -56,7 +58,7 @@ namespace Tour_Planner.BL
         }
 
         // Find Route between 2 places
-        public async Task<(string, CalculatedRouteResponse)> GetRoute(string address1, string address2, string transportation)
+        public async Task<(string, CalculatedRouteResponse)> GetRoute(string address1, string address2, Models.TransportType transportType)
         {
             // Long, Lat
             var startCoordinates = await GetCoordinates(address1);
@@ -64,8 +66,8 @@ namespace Tour_Planner.BL
 
             if (startCoordinates != null && endCoordinates != null)
             {
-                string transportType = TransportDictionary.ContainsKey(transportation) ? TransportDictionary[transportation] : TransportDictionary["Car"];
-                string requestUrl = $"{_urlDirections}{transportType}?api_key={_apiKey}&start={startCoordinates}&end={endCoordinates}";
+                string transportTypeString = TransportDictionary.ContainsKey(transportType) ? TransportDictionary[transportType] : TransportDictionary[Models.TransportType.Car];
+                string requestUrl = $"{_urlDirections}{transportTypeString}?api_key={_apiKey}&start={startCoordinates}&end={endCoordinates}";
 
                 // openrouteservice GET /v2/directions/{profile}
                 HttpResponseMessage response = await _httpClient.GetAsync(requestUrl);

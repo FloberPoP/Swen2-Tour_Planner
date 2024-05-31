@@ -77,7 +77,7 @@ namespace Tour_Planner.DAL
                     Description = "Tour von da HTL zum Mci",
                     From = "Hammerweg 1, 3910 Zwettl",
                     To = "Andre Freyskorn Str. 2, 3910 Zwettl",
-                    TransportType = "Car",
+                    TransportType = TransportType.Car,
                     Distance = 0,
                     EstimatedTime = 0,
                     Img = "tour1.jpg"
@@ -89,7 +89,7 @@ namespace Tour_Planner.DAL
                     Description = "Jürgens Arbeitsweg im Sommer",
                     From = "Gröblingerstraße 366, 3920 Groß Gerungs",
                     To = "Kreuzberg 107, 3920 Groß Gerungs",
-                    TransportType = "Car",
+                    TransportType = TransportType.Car,
                     Distance = 0,
                     EstimatedTime = 0,
                     Img = "tour2.jpg"
@@ -101,7 +101,7 @@ namespace Tour_Planner.DAL
                     Description = "Shoppen zum Pfeiffer-Vogl idk",
                     From = "Arbesbach 224",
                     To = "Arbesbach 64",
-                    TransportType = "Walk",
+                    TransportType = TransportType.Walk,
                     Distance = 0,
                     EstimatedTime = 0,
                     Img = "tour2.jpg"
@@ -113,7 +113,7 @@ namespace Tour_Planner.DAL
                     Description = "Meine Wohnung zur FH",
                     From = "Aignerstraße 6, 1200 Wien",
                     To = "Höchstädtpl. 6, 1200 Wien",
-                    TransportType = "Walk",
+                    TransportType = TransportType.Walk,
                     Distance = 0,
                     EstimatedTime = 0,
                     Img = "tour2.jpg"
@@ -125,7 +125,7 @@ namespace Tour_Planner.DAL
                     Description = "GEMMA LOCO?!",
                     From = "Aignerstraße 6, 1200 Wien",
                     To = "Loco-Bar",
-                    TransportType = "Car",
+                    TransportType = TransportType.Car,
                     Distance = 0,
                     EstimatedTime = 0,
                     Img = "tour2.jpg"
