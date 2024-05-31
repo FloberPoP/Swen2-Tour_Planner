@@ -17,9 +17,13 @@ namespace Tour_Planner.Models
         public Tour Tour { get; set; }
 
         private DateTime dateTime;
+
         public DateTime DateTime
         {
-            get { return dateTime; }
+            get 
+            {
+                return dateTime.ToLocalTime(); 
+            }
             set
             {
                 if (dateTime != value)

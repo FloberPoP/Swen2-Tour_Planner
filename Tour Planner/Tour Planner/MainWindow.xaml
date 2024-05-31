@@ -75,10 +75,41 @@
                     </StackPanel>
 
                     <!-- Searchbar -->
-                    <xctk:WatermarkTextBox Watermark="Search ..."  Grid.Column="1" Grid.Row="1" Grid.RowSpan="1" Grid.ColumnSpan="1" />
-                    
+                    <xctk:WatermarkTextBox Watermark="Search ..." Text="{Binding SearchFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.Row="1" Grid.RowSpan="1" Grid.ColumnSpan="1" />
+
                     <!-- Tour List -->
-                    <ListBox x:Name="tourListBox" ItemsSource="{Binding Tours}" DisplayMemberPath="Name" Grid.Column="1" Grid.Row="2" Grid.RowSpan="1" Grid.ColumnSpan="1" SelectionChanged="TourListBox_SelectionChanged" Padding="0,5,0,0"/>
+                    <Grid Grid.Row="2" Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="44*"/>
+                            <ColumnDefinition Width="257*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <ListBox x:Name="tourListBox" ItemsSource="{Binding FilteredTours}" DisplayMemberPath="Name" Grid.Row="0" SelectionChanged="TourListBox_SelectionChanged" Padding="0,5,0,0" Grid.ColumnSpan="2" Margin="0,0,0,161" Grid.RowSpan="2" />
+
+                        <Grid Grid.Row="1" Grid.ColumnSpan="2">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- First row -->
+                            <Label Content="Distance: " Grid.Row="0" Grid.Column="0"/>
+                            <Label Content="{Binding FormattedDistance}" Grid.Row="0" Grid.Column="1"/>
+
+                            <!-- Second row -->
+                            <Label Content="Estimated Time: " Grid.Row="1" Grid.Column="0"/>
+                            <Label Content="{Binding FormattedEstimatedTime}" Grid.Row="1" Grid.Column="1"/>
+                        </Grid>
+
+                    </Grid>
 
                     <!-- Google Maps ding -->
                     <!--<Image Source="{Binding MapImageUrl}" Grid.Row="2" Grid.Column="2" Stretch="Uniform" /> -->
@@ -86,8 +117,8 @@
                         <wpf:WebView2 x:Name="webView"/>
                     </Grid>
 
-                    <Button Grid.Row="1" Grid.Column="2" Click="Button_Click">Refresh</Button>
-                    
+                    <Button Grid.Row="1" Grid.Column="2" Click="Button_Click">Refresh Map</Button>
+
                     <!-- All Tour Logs -->
 
                     <Border Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Background="#333333">
@@ -115,7 +146,7 @@
             <TabItem Header="Tour">
                 <app:AddTours/>
             </TabItem>
-            
+
             <TabItem Header="TourLogs">
                 <app:AddTourLogs/>
             </TabItem>

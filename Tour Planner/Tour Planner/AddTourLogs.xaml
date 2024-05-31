@@ -32,36 +32,36 @@
             </Grid.RowDefinitions>
 
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="4*"/>
                 <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
 
-            <ListBox Grid.Row="0" Grid.Column="2" Grid.RowSpan="7" ItemsSource="{Binding TourLogsSelectedTour.TourLogs}" DisplayMemberPath="DateTime" SelectedItem="{Binding SelectedTourLog, Mode=TwoWay}"></ListBox>
+            <ListBox Grid.Row="0" Grid.Column="2" Grid.RowSpan="7" ItemsSource="{Binding TourLogsSelectedTour.TourLogs}" DisplayMemberPath="DateTime" SelectedItem="{Binding SelectedTourLog, Mode=TwoWay}" ></ListBox>
 
-            <Label Grid.Row="0" Grid.Column="0" Foreground="White">Tours:</Label>
+            <Label HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Foreground="White">Tours:</Label>
             <ComboBox x:Name="TourComboBox" Grid.Row="0" Grid.Column="1" ItemsSource="{Binding Tours}"  DisplayMemberPath="Name" SelectedItem="{Binding TourLogsSelectedTour, Mode=TwoWay}"/>
 
-            <Label Grid.Row="1" Grid.Column="0" Foreground="White">DateTime:</Label>
+            <Label HorizontalAlignment="Center" Grid.Row="1" Grid.Column="0" Foreground="White">DateTime:</Label>
             <xctk:DateTimePicker x:Name="DateTimePicker" Grid.Row="1" Grid.Column="1" Value="{Binding NewDateTime, Mode=TwoWay}" Format="Custom" FormatString="dd/MM/yyyy HH:mm:ss"/>
 
-            <Label Grid.Row="2" Grid.Column="0" Foreground="White">Comment:</Label>
+            <Label HorizontalAlignment="Center" Grid.Row="2" Grid.Column="0" Foreground="White">Comment:</Label>
             <TextBox x:Name="CommentTextBox" Grid.Row="2" Grid.Column="1" Text="{Binding NewComment, Mode=TwoWay}"/>
 
-            <Label Grid.Row="3" Grid.Column="0" Foreground="White">Difficulty:</Label>
+            <Label HorizontalAlignment="Center" Grid.Row="3" Grid.Column="0" Foreground="White">Difficulty:</Label>
             <ComboBox Grid.Row="3" Grid.Column="1" SelectedItem="{Binding NewDifficulty, Mode=TwoWay}">
                 <ComboBoxItem Content="Easy" IsSelected="{Binding NewDifficulty, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static models:DifficultyLevel.Easy}}"/>
                 <ComboBoxItem Content="Medium" IsSelected="{Binding NewDifficulty, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static models:DifficultyLevel.Medium}}"/>
                 <ComboBoxItem Content="Hard" IsSelected="{Binding NewDifficulty, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static models:DifficultyLevel.Hard}}"/>
             </ComboBox>
 
-            <Label Grid.Row="4" Grid.Column="0" Foreground="White">Total Distance:</Label>
+            <Label HorizontalAlignment="Center" Grid.Row="4" Grid.Column="0" Foreground="White">Total Distance: (Meters)</Label>
             <TextBox x:Name="TotalDistanceTextBox" Grid.Row="4" Grid.Column="1" Text="{Binding NewTotalDistance, Mode=TwoWay}"/>
 
-            <Label Grid.Row="5" Grid.Column="0" Foreground="White">Total Time:</Label>
+            <Label HorizontalAlignment="Center" Grid.Row="5" Grid.Column="0" Foreground="White">Total Time: (Seconds)</Label>
             <TextBox x:Name="TotalTimeTextBox" Grid.Row="5" Grid.Column="1" Text="{Binding NewTotalTime, Mode=TwoWay}"/>
 
-            <Label Grid.Row="6" Grid.Column="0" Foreground="White">Rating ( X / 10 )</Label>
+            <Label HorizontalAlignment="Center" Grid.Row="6" Grid.Column="0" Foreground="White">Rating ( X / 10 )</Label>
             <TextBox x:Name="RatingTextBox" Grid.Row="6" Grid.Column="1" Text="{Binding NewRating, Mode=TwoWay}"/>
             
         </Grid>

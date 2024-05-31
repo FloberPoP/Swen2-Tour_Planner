@@ -41,6 +41,8 @@ namespace Tour_Planner.ViewModels
             ExportTourDataCommand = new RelayCommand(o => { ExportTourData(); ShowPopup("Information for Export Tour Data"); });
             ImportTourDataCommand = new RelayCommand(filePath => ImportTourData(filePath));
 
+            ClearValuesCommand = new RelayCommand(o => ClearTourFields());
+
             _tourService = tourService;
             _routeService = new RouteService();
 
@@ -112,7 +114,7 @@ namespace Tour_Planner.ViewModels
             }
         }
 
-        /*
+        /* Map?
         // Construct the map with the Long-Lat-Coords
         // Basically only needed for Single-Report-Generation ("Image")
         private async Task<string> ConstructMapUrl(string address1, string address2)
@@ -140,75 +142,6 @@ namespace Tour_Planner.ViewModels
         }
         */
 
-        private bool ValidateTourLogInput()
-        {
-            string error = null;
-
-            if (TourLogsSelectedTour == null)
-            {
-                error = "No tour selected. Please select a tour before adding a tour log.";
-            }
-            else if(NewDateTime == null)
-            {
-                error = "Date cannot be null or empty";
-            }
-            else if (string.IsNullOrWhiteSpace(NewComment))
-            {
-                error = "Comment cannot be null or empty.";
-            }
-            else if (string.IsNullOrEmpty(NewTotalDistance))
-            {
-                error = "Distance cannot be null or empty.";
-            }
-            else if (string.IsNullOrEmpty(NewTotalTime))
-            {
-                error = "Time cannot be null or empty.";
-            }
-            else if (NewRating == null || NewRating < 0 || NewRating > 10)
-            {
-                error = "Rating must be between 0 and 10.";
-            }
-            if (error != null)
-            {
-                MessageBox.Show($"Validation failed: {error}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                Log.Info($"Validation failed: {error}");
-                return false;
-            }
-            else
-                return true;
-        }
-
-        private bool ValidateTourInput()
-        {
-            string error = null;
-
-            if (string.IsNullOrEmpty(NewTourName))
-            {
-                error = "Name cannot be null or empty.";
-            }
-            else if (string.IsNullOrEmpty(NewTourDescr))
-            {
-                error = "Description cannot be null or empty.";
-            }
-            else if (string.IsNullOrEmpty(NewTourFrom))
-            {
-                error = "From cannot be null or empty.";
-            }
-            else if (string.IsNullOrEmpty(NewTourTo))
-            {
-                error = "To cannot be null or empty.";
-            }
-            if (error != null)
-            {
-                MessageBox.Show($"Validation failed: {error}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                Log.Info($"Validation failed: {error}");
-                return false;
-            }
-            else
-                return true;
-        }
-
-
         public ICommand TourReportCommand { get; set; }
         public ICommand SummarizedTourReportCommand { get; set; }
         public ICommand ExportTourDataCommand { get; set; }
@@ -221,6 +154,8 @@ namespace Tour_Planner.ViewModels
         public ICommand AddTourLogCommand { get; set; }
         public ICommand DeleteTourLogCommand { get; set; }
         public ICommand SaveTourLogCommand { get; set; }
+
+        public ICommand ClearValuesCommand { get; set; }
 
         public void TourReport()
         {
@@ -343,7 +278,10 @@ namespace Tour_Planner.ViewModels
         private void LoadTours()
         {
             Tours = new ObservableCollection<Tour>(_tourService.GetAllTours());
+            FilteredTours = new ObservableCollection<Tour>(Tours);
+
             foreach (Tour tour in Tours) { Log.Info(tour.Name+": "+tour.Id); }
+
             Log.Info($"Tours Loading Count: {Tours.Count()}");
         }
         public void AddTourLog()
@@ -392,6 +330,41 @@ namespace Tour_Planner.ViewModels
         }
 
         public ObservableCollection<Tour> Tours { get; set; }
+
+        private ObservableCollection<Tour> filteredTours;
+        public ObservableCollection<Tour> FilteredTours
+        {
+            get { return filteredTours; }
+            set { filteredTours = value; OnPropertyChanged(); }
+        }
+
+        private string _searchFilter;
+        public string SearchFilter
+        {
+            get
+            {
+                return _searchFilter;
+            }
+
+            set
+            {
+                _searchFilter = value;
+                ApplyFilter();
+                OnPropertyChanged();
+            }
+        }
+
+        private void ApplyFilter()
+        {
+            string searchText = SearchFilter?.ToLower() ?? "";
+
+            FilteredTours = new ObservableCollection<Tour>(Tours.Where(tour =>
+                tour.Name.ToLower().Contains(searchText) ||
+                tour.Description.ToLower().Contains(searchText) ||
+                tour.From.ToLower().Contains(searchText) ||
+                tour.To.ToLower().Contains(searchText)
+            ));
+        }
 
         private Tour selectedTour;
         public Tour SelectedTour
@@ -494,6 +467,7 @@ namespace Tour_Planner.ViewModels
             {
                 newTourDistance = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(FormattedDistance));
             }
         }
 
@@ -505,6 +479,7 @@ namespace Tour_Planner.ViewModels
             {
                 newTourEstTime = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(FormattedEstimatedTime));
             }
         }        
 
@@ -601,6 +576,25 @@ namespace Tour_Planner.ViewModels
             }
         }
 
+        public string FormattedDistance
+        {
+            get
+            {
+                return $"{NewTourDistance / 1000.0:F2} km";
+            }
+        }
+
+        public string FormattedEstimatedTime
+        {
+            get
+            {
+                int hours = NewTourEstTime / 3600;
+                int minutes = (NewTourEstTime % 3600) / 60;
+                int seconds = NewTourEstTime % 60;
+                return $"{hours}h {minutes}min {seconds}sec";
+            }
+        }
+
         public string NewTotalTime
         {
             get { return newtotalTime; }
@@ -618,6 +612,107 @@ namespace Tour_Planner.ViewModels
             {
                 newrating = value;
                 OnPropertyChanged();
+            }
+        }
+
+        private bool ValidateTourLogInput()
+        {
+            string error = null;
+
+            if (TourLogsSelectedTour == null)
+            {
+                error = "No tour selected. Please select a tour before adding a tour log.";
+            }
+            else if (NewDateTime == null)
+            {
+                error = "Date cannot be null or empty";
+            }
+            else if (string.IsNullOrWhiteSpace(NewComment))
+            {
+                error = "Comment cannot be null or empty.";
+            }
+            else if (string.IsNullOrWhiteSpace(NewTotalDistance) || !int.TryParse(NewTotalDistance, out int distance) || distance <= 0)
+            {
+                error = "Total Distance must be a positive integer.";
+            }
+            else if (string.IsNullOrWhiteSpace(NewTotalTime) || !int.TryParse(NewTotalTime, out int time) || time <= 0)
+            {
+                error = "Total Time must be a positive integer.";
+            }
+            else if (NewRating == null || NewRating < 0 || NewRating > 10)
+            {
+                error = "Rating must be between 0 and 10.";
+            }
+
+            if (error != null)
+            {
+                MessageBox.Show($"Validation failed: {error}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                Log.Info($"Validation failed: {error}");
+
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+        private bool ValidateTourInput()
+        {
+            string error = null;
+
+            if (string.IsNullOrEmpty(NewTourName))
+            {
+                error = "Name cannot be null or empty.";
+            }
+            else if (NewTourName.Length > 100)
+            {
+                error = "Name cannot be longer than 100 characters.";
+            }
+
+            else if (string.IsNullOrEmpty(NewTourDescr))
+            {
+                error = "Description cannot be null or empty.";
+            }
+            else if (NewTourDescr.Length > 500)
+            {
+                error = "Description cannot be longer than 500 characters.";
+            }
+
+            else if (string.IsNullOrEmpty(NewTourFrom))
+            {
+                error = "From cannot be null or empty.";
+            }
+
+            else if (string.IsNullOrEmpty(NewTourTo))
+            {
+                error = "To cannot be null or empty.";
+            }
+
+            else if (!Enum.IsDefined(typeof(TransportType), NewTourTransType))
+            {
+                error = "Transport Type is not valid.";
+            }
+
+            else if (NewTourDistance < 0)
+            {
+                error = "Distance must be a positive integer.";
+            }
+            else if (NewTourEstTime < 0)
+            {
+                error = "Estimated Time must be a positive integer.";
+            }
+
+            if (error != null)
+            {
+                MessageBox.Show($"Validation failed: {error}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                Log.Info($"Validation failed: {error}");
+
+                return false;
+            }
+
+            else
+            {
+                return true;
             }
         }
 
