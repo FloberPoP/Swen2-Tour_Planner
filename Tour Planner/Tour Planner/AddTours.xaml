@@ -51,7 +51,7 @@
             <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding NewTourTo}"/>
 
             <Label Grid.Row="4" Grid.Column="0" Foreground="White">Transport Type:</Label>
-            <ComboBox Grid.Row="3" Grid.Column="1" SelectedItem="{Binding NewTourTransType, Mode=TwoWay}">
+            <ComboBox Grid.Row="4" Grid.Column="1" SelectedItem="{Binding NewTourTransType, Mode=TwoWay}">
                 <ComboBoxItem Content="Walk" IsSelected="{Binding NewTourTransType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static models:TransportType.Walk}}"/>
                 <ComboBoxItem Content="Bicycle" IsSelected="{Binding NewTourTransType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static models:TransportType.Bicycle}}"/>
                 <ComboBoxItem Content="Car" IsSelected="{Binding NewTourTransType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static models:TransportType.Car}}"/>

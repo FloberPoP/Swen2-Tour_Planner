@@ -63,7 +63,7 @@
 
             <Label Grid.Row="6" Grid.Column="0" Foreground="White">Rating ( X / 10 )</Label>
             <TextBox x:Name="RatingTextBox" Grid.Row="6" Grid.Column="1" Text="{Binding NewRating, Mode=TwoWay}"/>
-
+            
         </Grid>
 
         <Grid Grid.Row="2">
