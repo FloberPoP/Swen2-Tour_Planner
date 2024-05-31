@@ -133,24 +133,6 @@ namespace Tour_Planner.DAL
 
                 context.SaveChanges();
             }
-
-            if (!context.TourLogs.Any())
-            {
-                var tour = context.Tours.First();
-
-                context.TourLogs.Add(new TourLog
-                {
-                    Tour = tour,
-                    DateTime = DateTime.Now,
-                    Comment = "First time mci, owa umweg beim keskin",
-                    Difficulty = "Medium",
-                    TotalDistance = "3500",
-                    TotalTime = "10800",
-                    Rating = 8
-                });
-
-                context.SaveChanges();
-            }
         }
     }
 }

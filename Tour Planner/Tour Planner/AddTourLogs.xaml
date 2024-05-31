@@ -4,8 +4,13 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:converters="clr-namespace:Tour_Planner.Converters"
+             xmlns:models="clr-namespace:Tour_Planner.Models"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <converters:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
+    </UserControl.Resources>
     <Grid Background="#333">
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
@@ -44,7 +49,11 @@
             <TextBox x:Name="CommentTextBox" Grid.Row="2" Grid.Column="1" Text="{Binding NewComment, Mode=TwoWay}"/>
 
             <Label Grid.Row="3" Grid.Column="0" Foreground="White">Difficulty:</Label>
-            <TextBox x:Name="DifficultyTextBox" Grid.Row="3" Grid.Column="1" Text="{Binding NewDifficulty, Mode=TwoWay}"/>
+            <ComboBox Grid.Row="3" Grid.Column="1" SelectedItem="{Binding NewDifficulty, Mode=TwoWay}">
+                <ComboBoxItem Content="Easy" IsSelected="{Binding NewDifficulty, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static models:DifficultyLevel.Easy}}"/>
+                <ComboBoxItem Content="Medium" IsSelected="{Binding NewDifficulty, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static models:DifficultyLevel.Medium}}"/>
+                <ComboBoxItem Content="Hard" IsSelected="{Binding NewDifficulty, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static models:DifficultyLevel.Hard}}"/>
+            </ComboBox>
 
             <Label Grid.Row="4" Grid.Column="0" Foreground="White">Total Distance:</Label>
             <TextBox x:Name="TotalDistanceTextBox" Grid.Row="4" Grid.Column="1" Text="{Binding NewTotalDistance, Mode=TwoWay}"/>

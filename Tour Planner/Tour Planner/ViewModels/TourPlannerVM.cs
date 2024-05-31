@@ -233,7 +233,7 @@ namespace Tour_Planner.ViewModels
                 TransportType = NewTourTransType,
                 Distance = NewTourDistance,
                 EstimatedTime = NewTourEstTime,
-                Img = "PlaceHolder"
+                Img = "Placeholder" //Img should be stored in Filesystem
             };
 
             Log.Info($"Tour Added: {newTour.Name}");
@@ -251,7 +251,7 @@ namespace Tour_Planner.ViewModels
                 SelectedTour.TransportType = NewTourTransType;
                 SelectedTour.Distance = NewTourDistance;
                 SelectedTour.EstimatedTime = NewTourEstTime;
-                SelectedTour.Img = "PlaceHolder";
+                SelectedTour.Img = "Placeholder"; //Img should be stored in Filesystem
 
                 Log.Info($"Tour Updated: {SelectedTour.Name}");
                 _tourService.UpdateTour(SelectedTour);
@@ -474,7 +474,7 @@ namespace Tour_Planner.ViewModels
         {
             NewDateTime = DateTime.Now;
             NewComment = string.Empty;
-            NewDifficulty = string.Empty;
+            NewDifficulty = DifficultyLevel.None;
             NewTotalDistance = string.Empty;
             NewTotalTime = string.Empty;
             NewRating = 0;
@@ -482,7 +482,7 @@ namespace Tour_Planner.ViewModels
 
         public DateTime newdateTime { get; set; }
         public string newcomment { get; set; }
-        public string newdifficulty { get; set; }
+        public DifficultyLevel newdifficulty { get; set; }
         public string newtotalDistance { get; set; }
         public string newtotalTime { get; set; }
         public int newrating { get; set; }
@@ -507,7 +507,7 @@ namespace Tour_Planner.ViewModels
             }
         }
 
-        public string NewDifficulty
+        public DifficultyLevel NewDifficulty
         {
             get { return newdifficulty; }
             set

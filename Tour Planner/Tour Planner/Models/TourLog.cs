@@ -4,6 +4,14 @@ using System.Runtime.CompilerServices;
 
 namespace Tour_Planner.Models
 {
+    public enum DifficultyLevel
+    {
+        Easy,
+        Medium,
+        Hard,
+        None
+    }
+
     public class TourLog : INotifyPropertyChanged
     {
         public Tour Tour { get; set; }
@@ -25,7 +33,7 @@ namespace Tour_Planner.Models
         [Key]
         public int Id { get; set; }
         public string Comment { get; set; }
-        public string Difficulty { get; set; }
+        public DifficultyLevel Difficulty { get; set; }
         public string TotalDistance { get; set; }
         public string TotalTime { get; set; }
         public int Rating { get; set; }
