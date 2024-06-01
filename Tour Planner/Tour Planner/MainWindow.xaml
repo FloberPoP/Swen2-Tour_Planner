@@ -6,6 +6,7 @@
         xmlns:wpf="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:app="clr-namespace:Tour_Planner"
+        xmlns:models="clr-namespace:Tour_Planner.Models"
         mc:Ignorable="d"
         Title="MainWindow" Height="900" Width="1300">
     <Grid>
@@ -71,12 +72,25 @@
                                     <ToolTip Content="Import Tour Data" Placement="Right"/>
                                 </Button.ToolTip>
                             </Button>
-                            <Button Background="#333333" Margin="5" Command="{Binding ExportDataAsCSVCommand}">
+                            <Button Background="#333333" Margin="5" Command="{Binding ExportDataCommand}" CommandParameter="{x:Static models:ExportFormat.CSV}">
                                 <Label Foreground="White">Export CSV</Label>
                                 <Button.ToolTip>
                                     <ToolTip Content="Export Data as CSV" Placement="Right"/>
                                 </Button.ToolTip>
                             </Button>
+                            <Button Background="#333333" Margin="5" Command="{Binding ExportDataCommand}" CommandParameter="{x:Static models:ExportFormat.XML}">
+                                <Label Foreground="White">Export XML</Label>
+                                <Button.ToolTip>
+                                    <ToolTip Content="Export Data as XML" Placement="Right"/>
+                                </Button.ToolTip>
+                            </Button>
+                            <Button Background="#333333" Margin="5" Command="{Binding ExportDataCommand}" CommandParameter="{x:Static models:ExportFormat.JSON}">
+                                <Label Foreground="White">Export JSON</Label>
+                                <Button.ToolTip>
+                                    <ToolTip Content="Export Data as JSON" Placement="Right"/>
+                                </Button.ToolTip>
+                            </Button>
+
                         </StackPanel>
                     </StackPanel>
 

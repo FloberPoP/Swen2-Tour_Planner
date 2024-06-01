@@ -9,6 +9,7 @@ using System.Windows;
 using System.IO;
 using System.Text;
 using Tour_Planner.DAL;
+using static ExportImportService;
 
 namespace Tour_Planner.ViewModels
 {
@@ -34,7 +35,7 @@ namespace Tour_Planner.ViewModels
             ImportTourDataCommand = new RelayCommand(filePath => ImportTourData(filePath));
 
             ClearValuesCommand = new RelayCommand(o => ClearTourFields());
-            ExportDataAsCSVCommand = new RelayCommand(o => { ExportAsCSV(); ShowPopup("Export as CSV"); });
+            ExportDataCommand = new RelayCommand(param => { ExportAllTours((ExportFormat)param); ShowPopup("Information for Export All Tours Data");});
 
             _tourService = tourService;
             _routeService = new RouteService();
@@ -154,7 +155,7 @@ namespace Tour_Planner.ViewModels
         public ICommand SaveTourLogCommand { get; set; }
 
         public ICommand ClearValuesCommand { get; set; }
-        public ICommand ExportDataAsCSVCommand { get; set; }
+        public ICommand ExportDataCommand { get; set; }
 
         public void TourReport()
         {
@@ -217,28 +218,39 @@ namespace Tour_Planner.ViewModels
                         Log.Info($"Importing tour data from: {path}");
                         Log.Info($"---{tmpTour.Name},{tmpTour.Id}---");
                         _tourService.AddTour(tmpTour);
-                        Tours.Add(tmpTour);                   
+                        Tours.Add(tmpTour);
+                        OnPropertyChanged(nameof(FilteredTours));
                     }
 
                     else
                     {
+                        ShowPopup("Error Importing Check for same Id`s");
                         Log.Info("Tours collection is not initialized.");
                     }
                 }
+                else 
+                {
+                    ShowPopup("Error Importing Check for same Id`s");
+                }
             }     
         }
-        public void ExportAsCSV()
+
+        public void ExportAllTours(ExportFormat format)
         {
-            var sb = new StringBuilder();
-            sb.AppendLine("Name;Description;From;To;Distance;EstimatedTime;Popularity;ChildFriendliness");
-
-            foreach (var tour in Tours)
+            switch (format)
             {
-                sb.AppendLine($"{tour.Name};{tour.Description};{tour.From};{tour.To};{tour.Distance};{tour.EstimatedTime};{tour.Popularity};{tour.ChildFriendliness}");
+                case ExportFormat.CSV:
+                    ExportImportService.ExportAsCSV(Tours.ToList());
+                    break;
+                case ExportFormat.XML:
+                    ExportImportService.ExportAsXML(Tours.ToList());
+                    break;
+                case ExportFormat.JSON:
+                    ExportImportService.ExportAsJSON(Tours.ToList());
+                    break;
+                default:
+                    break;
             }
-
-            string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "TourData.csv");
-            File.WriteAllText(filePath, sb.ToString());
         }
 
         public void AddTour()
@@ -260,6 +272,8 @@ namespace Tour_Planner.ViewModels
                 Log.Info($"Tour Added: {newTour.Name}");
                 _tourService.AddTour(newTour);
                 Tours.Add(newTour);
+
+                FilteredTours = new ObservableCollection<Tour>(Tours);
             }          
         }
         public void UpdateTour()
@@ -277,6 +291,7 @@ namespace Tour_Planner.ViewModels
 
                 Log.Info($"Tour Updated: {SelectedTour.Name}");
                 _tourService.UpdateTour(SelectedTour);
+                FilteredTours = new ObservableCollection<Tour>(Tours);
             }
         }
         public void DeleteTour()
@@ -286,6 +301,7 @@ namespace Tour_Planner.ViewModels
                 Log.Info($"Tour Deleted: {SelectedTour.Name}");
                 _tourService.DeleteTour(SelectedTour.Id);
                 Tours.Remove(SelectedTour);
+                FilteredTours = new ObservableCollection<Tour>(Tours);
             }
         }
         private void LoadTours()
@@ -315,6 +331,7 @@ namespace Tour_Planner.ViewModels
                 Log.Info($"Adding Tourlog to Tour: {newTourLog.Tour.Name}");
                 TourLogsSelectedTour.TourLogs.Add(newTourLog);
                 _tourService.UpdateTour(TourLogsSelectedTour);
+                FilteredTours = new ObservableCollection<Tour>(Tours);
             }           
         }
         public void DeleteTourLog()
@@ -324,6 +341,7 @@ namespace Tour_Planner.ViewModels
                 Log.Info($"Deleting Tourlog from Tour: {SelectedTourLog.Tour.Name}");
                 TourLogsSelectedTour.TourLogs.Remove(SelectedTourLog);
                 _tourService.UpdateTour(TourLogsSelectedTour);
+                FilteredTours = new ObservableCollection<Tour>(Tours);
             }
         }
         public void SaveTourLog()
@@ -339,6 +357,7 @@ namespace Tour_Planner.ViewModels
 
                 Log.Info($"Updating Tourlog from Tour: {SelectedTourLog.Tour.Name}");
                 _tourService.UpdateTour(TourLogsSelectedTour);
+                FilteredTours = new ObservableCollection<Tour>(Tours);
             }
         }
 

@@ -12,7 +12,12 @@ namespace Tour_Planner.Models
         Car,
         None
     }
-
+    public enum ExportFormat
+    {
+        CSV,
+        XML,
+        JSON
+    }
     public class Tour : INotifyPropertyChanged
     {
         private ObservableCollection<TourLog> tourLogs;
