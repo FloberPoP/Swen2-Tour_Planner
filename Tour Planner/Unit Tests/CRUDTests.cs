@@ -3,27 +3,43 @@ using Tour_Planner.BL;
 using Tour_Planner.DAL;
 using Tour_Planner.Models;
 using Tour_Planner.ViewModels;
+using static Microsoft.AspNetCore.Hosting.Internal.HostingApplication;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace UnitTests
 {
     [TestClass]
     public class TourPlannerVMTests
     {
+        private TourContext context;
+        private TourRepository repository;
         private TourPlannerVM tourPlannerVM;
-        private readonly ITourService _tourService;
+        private TourService _tourService;
+
         [TestInitialize]
         public void SetUp()
         {
-            // Create options for in-memory database
             var options = new DbContextOptionsBuilder<TourContext>()
                 .UseInMemoryDatabase(databaseName: "TestDatabase")
                 .Options;
 
-            // Create instance of TourContext with in-memory database options
-            TourContext context = new TourContext(options);
-            TourRepository repository = new TourRepository(context);
-            ITourService _tourService = new TourService(repository);
+            context = new TourContext(options);
+            repository = new TourRepository(context);
+            _tourService = new TourService(repository);
             tourPlannerVM = new TourPlannerVM(_tourService);
+        }
+
+        [TestCleanup]
+        public void Cleanup()
+        {
+            context.Database.EnsureDeleted();
+            context.Dispose();
+
+            var options = new DbContextOptionsBuilder<TourContext>()
+                .UseInMemoryDatabase(databaseName: "TestDatabase")
+            .Options;
+
+            context = new TourContext(options); 
         }
 
         [TestMethod]
@@ -31,7 +47,19 @@ namespace UnitTests
         {
             int initialCount = tourPlannerVM.Tours.Count;
 
-            tourPlannerVM.AddTour();
+            Tour test = new Tour
+            {
+                Name = "test_Name",
+                Description = "test_Descr",
+                From = "3910 Zwettl",
+                To = "1200 Wien",
+                TransportType = TransportType.Car,
+                Distance = 0,
+                EstimatedTime = 0,
+                Img = "tour1.jpg"
+            };
+
+            tourPlannerVM.Tours.Add(test);
 
             Assert.AreEqual(initialCount + 1, tourPlannerVM.Tours.Count);
         }
@@ -39,7 +67,17 @@ namespace UnitTests
         [TestMethod]
         public void UpdateTour()
         {
-            var selectedTour = new Tour { Name = "TestTour" };
+            Tour selectedTour = new Tour
+            {
+                Name = "test_Name",
+                Description = "test_Descr",
+                From = "3910 Zwettl",
+                To = "1200 Wien",
+                TransportType = TransportType.Car,
+                Distance = 0,
+                EstimatedTime = 0,
+                Img = "tour1.jpg"
+            };
 
             tourPlannerVM.SelectedTour = selectedTour;
             tourPlannerVM.UpdateTour();
@@ -50,10 +88,23 @@ namespace UnitTests
         [TestMethod]
         public void DeleteTour()
         {
-            var tourToRemove = new Tour { Name = "TestTour" };
+            Tour tourToRemove = new Tour
+            {
+                Name = "test_Name",
+                Description = "test_Descr",
+                From = "3910 Zwettl",
+                To = "1200 Wien",
+                TransportType = TransportType.Car,
+                Distance = 0,
+                EstimatedTime = 0,
+                Img = "tour1.jpg"
+            };
 
             tourPlannerVM.Tours.Add(tourToRemove);
             tourPlannerVM.SelectedTour = tourToRemove;
+
+            Assert.IsTrue(tourPlannerVM.Tours.Contains(tourToRemove));
+
             tourPlannerVM.DeleteTour();
 
             Assert.IsFalse(tourPlannerVM.Tours.Contains(tourToRemove));
@@ -62,21 +113,62 @@ namespace UnitTests
         [TestMethod]
         public void AddTourLog()
         {
-            var selectedTour = new Tour { Name = "TestTour" };
-            tourPlannerVM.Tours.Add(selectedTour);
-            tourPlannerVM.TourLogsSelectedTour = selectedTour;
-            int initialCount = selectedTour.TourLogs.Count;
+            Tour test = new Tour
+            {
+                Name = "test_Name",
+                Description = "test_Descr",
+                From = "3910 Zwettl",
+                To = "1200 Wien",
+                TransportType = TransportType.Car,
+                Distance = 0,
+                EstimatedTime = 0,
+                Img = "tour1.jpg"
+            };
 
-            tourPlannerVM.AddTourLog();
+            tourPlannerVM.Tours.Add(test);
+            tourPlannerVM.TourLogsSelectedTour = test;
+            int initialCount = test.TourLogs.Count;
 
-            Assert.AreEqual(initialCount + 1, selectedTour.TourLogs.Count);
+            test.TourLogs.Add(new TourLog
+            {
+                Tour = test,
+                DateTime = DateTime.Now,
+                Comment = "testlog_Comment",
+                Difficulty = DifficultyLevel.Medium,
+                TotalDistance = "5000",
+                TotalTime = "3600",
+                Rating = 5
+            });
+
+            Assert.AreEqual(initialCount + 1, test.TourLogs.Count);
         }
 
         [TestMethod]
         public void UpdateTourLog()
         {
-            var selectedTour = new Tour { Name = "TestTour" };
-            var selectedTourLog = new TourLog { Tour = selectedTour, DateTime = DateTime.Now, Comment = "TestComment" };
+            var selectedTour = new Tour
+            {
+                Name = "test_Name",
+                Description = "test_Descr",
+                From = "3910 Zwettl",
+                To = "1200 Wien",
+                TransportType = TransportType.Car,
+                Distance = 0,
+                EstimatedTime = 0,
+                Img = "tour1.jpg"
+            };
+
+            var selectedTourLog = new TourLog
+            {
+                Tour = selectedTour,
+                DateTime = DateTime.Now,
+                Comment = "testlog_Comment",
+                Difficulty = DifficultyLevel.Medium,
+                TotalDistance = "5000",
+                TotalTime = "3600",
+                Rating = 5
+            };
+
             tourPlannerVM.TourLogsSelectedTour = selectedTour;
             tourPlannerVM.SelectedTourLog = selectedTourLog;
 
@@ -89,15 +181,36 @@ namespace UnitTests
         [TestMethod]
         public void DeleteTourLog()
         {
-            var selectedTour = new Tour { Name = "TestTour" };
-            var tourLogToDelete = new TourLog { Tour = selectedTour, DateTime = DateTime.Now, Comment = "TestComment" };
-            tourPlannerVM.TourLogsSelectedTour = selectedTour;
-            tourPlannerVM.SelectedTourLog = tourLogToDelete;
-            tourPlannerVM.AddTourLog();
+            Tour test = new Tour
+            {
+                Name = "test_Name",
+                Description = "test_Descr",
+                From = "3910 Zwettl",
+                To = "1200 Wien",
+                TransportType = TransportType.Car,
+                Distance = 0,
+                EstimatedTime = 0,
+                Img = "tour1.jpg"
+            };
 
+            TourLog testLog = new TourLog
+            {
+                Tour = test,
+                DateTime = DateTime.Now,
+                Comment = "testlog_Comment",
+                Difficulty = DifficultyLevel.Medium,
+                TotalDistance = "5000",
+                TotalTime = "3600",
+                Rating = 5
+            };
+
+            tourPlannerVM.TourLogsSelectedTour = test;
+            tourPlannerVM.SelectedTourLog = testLog;
+
+            tourPlannerVM.AddTourLog();
             tourPlannerVM.DeleteTourLog();
 
-            Assert.IsFalse(tourPlannerVM.TourLogsSelectedTour.TourLogs.Contains(tourLogToDelete));
+            Assert.IsFalse(tourPlannerVM.TourLogsSelectedTour.TourLogs.Contains(testLog));
         }
     }
 }

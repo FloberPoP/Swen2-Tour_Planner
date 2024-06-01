@@ -19,6 +19,7 @@ namespace Tour_Planner.Models
         public Tour()
         {
             tourLogs = new ObservableCollection<TourLog>();
+            tourLogs.CollectionChanged += (s, e) => UpdateComputedProperties();
         }
 
         public ObservableCollection<TourLog> TourLogs
@@ -28,6 +29,7 @@ namespace Tour_Planner.Models
             {
                 tourLogs = value;
                 OnPropertyChanged(nameof(TourLogs));
+                UpdateComputedProperties();
             }
         }
 
@@ -68,6 +70,31 @@ namespace Tour_Planner.Models
         public int Distance { get; set; }
         public int EstimatedTime { get; set; }
         public string Img { get; set; }
+        public int Popularity => TourLogs?.Count ?? 0;
+        public string ChildFriendliness
+        {
+            get
+            {
+                if (TourLogs == null || !TourLogs.Any())
+                {
+                    return "Not enough data";
+                }
+
+                double averageDifficulty = TourLogs.Average(log => (int)log.Difficulty);
+                double averageTime = TourLogs.Average(log => Convert.ToDouble(log.TotalTime));
+                double averageDistance = TourLogs.Average(log => Convert.ToDouble(log.TotalDistance));
+
+                bool isChildFriendly = averageDifficulty <= 2 && averageTime <= 3600 && averageDistance <= 5000;
+
+                return isChildFriendly ? "Child-Friendly" : "Not Child-Friendly";
+            }
+        }
+
+        private void UpdateComputedProperties()
+        {
+            OnPropertyChanged(nameof(Popularity));
+            OnPropertyChanged(nameof(ChildFriendliness));
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged(string propertyName)

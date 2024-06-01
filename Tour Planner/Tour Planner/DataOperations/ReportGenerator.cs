@@ -49,13 +49,14 @@ public class ReportGenerator
             document.Add(new Paragraph($"Distance: {FormatMetersToKilometers(tour.Distance)}", detailsFont));
             document.Add(new Paragraph($"Estimated Time: {FormatSecondsToTime(tour.EstimatedTime)}", detailsFont));
 
+            document.Add(new Paragraph($"Popularity: {tour.Popularity}", detailsFont));
+            document.Add(new Paragraph($"Child-Friendliness: {tour.ChildFriendliness}", detailsFont));
+
             // Add Image
             if (!string.IsNullOrEmpty(tour.Img))
             {
                 try
                 {
-                    //MessageBox.Show(tour.Img);
-
                     Paragraph para = new Paragraph("Image:");
                     string imgurl = tour.Img;
                     iTextSharp.text.Image jpg = iTextSharp.text.Image.GetInstance(imgurl);
@@ -66,15 +67,6 @@ public class ReportGenerator
 
                     document.Add(para);
                     document.Add(jpg);
-
-                    /*
-                    Image tourImage = Image.GetInstance(new Uri(tour.Img));
-                    tourImage.Alignment = Element.ALIGN_CENTER;
-                    tourImage.SpacingBefore = 20f;
-                    tourImage.SpacingAfter = 20f;
-                    tourImage.ScaleToFit(500f, 500f);
-                    document.Add(tourImage);
-                    */
                 }
 
                 catch (Exception ex)
@@ -161,6 +153,8 @@ public class ReportGenerator
                 document.Add(new Paragraph($"Average Time: {formattedAvgTime}", detailsFont));
                 document.Add(new Paragraph($"Average Distance: {formattedAvgDistance}", detailsFont));
                 document.Add(new Paragraph($"Average Rating: {avgRating} / 10", detailsFont));
+                document.Add(new Paragraph($"Popularity: {tour.Popularity}", detailsFont));
+                document.Add(new Paragraph($"Child-Friendliness: {tour.ChildFriendliness}", detailsFont));
             }
 
             else

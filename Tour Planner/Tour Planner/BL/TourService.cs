@@ -1,6 +1,5 @@
 ﻿using Tour_Planner.DAL;
 using Tour_Planner.Models;
-using System.Linq;
 
 namespace Tour_Planner.BL
 {

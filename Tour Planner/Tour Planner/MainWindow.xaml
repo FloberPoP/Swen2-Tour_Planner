@@ -71,6 +71,12 @@
                                     <ToolTip Content="Import Tour Data" Placement="Right"/>
                                 </Button.ToolTip>
                             </Button>
+                            <Button Background="#333333" Margin="5" Command="{Binding ExportDataAsCSVCommand}">
+                                <Label Foreground="White">Export CSV</Label>
+                                <Button.ToolTip>
+                                    <ToolTip Content="Export Data as CSV" Placement="Right"/>
+                                </Button.ToolTip>
+                            </Button>
                         </StackPanel>
                     </StackPanel>
 
@@ -94,19 +100,25 @@
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
-                            <!-- First row -->
                             <Label Content="Distance: " Grid.Row="0" Grid.Column="0"/>
                             <Label Content="{Binding FormattedDistance}" Grid.Row="0" Grid.Column="1"/>
 
-                            <!-- Second row -->
                             <Label Content="Estimated Time: " Grid.Row="1" Grid.Column="0"/>
                             <Label Content="{Binding FormattedEstimatedTime}" Grid.Row="1" Grid.Column="1"/>
+                            
+                            <Label Content="Popularity: " Grid.Row="2" Grid.Column="0"/>
+                            <Label Content="{Binding SelectedTour.Popularity}" Grid.Row="2" Grid.Column="1"/>
+
+                            <Label Content="Child-Friendliness: " Grid.Row="3" Grid.Column="0"/>
+                            <Label Content="{Binding SelectedTour.ChildFriendliness}" Grid.Row="3" Grid.Column="1"/>
                         </Grid>
 
                     </Grid>

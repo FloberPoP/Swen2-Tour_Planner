@@ -1,11 +1,7 @@
 ﻿using System.Globalization;
-using System.Net;
 using System.Net.Http;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Tour_Planner.BL.GeoLocationAPI;
-using Tour_Planner.Models;
 
 namespace Tour_Planner.BL
 {

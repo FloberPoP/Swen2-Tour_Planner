@@ -9,8 +9,9 @@ using System.Linq;
 using System.Windows;
 using Tour_Planner.BL;
 using Tour_Planner.Models;
+using Tour_Planner.DAL;
 
-namespace Tour_Planner.DAL
+namespace Tour_Planner
 {
     public partial class App : Application
     {

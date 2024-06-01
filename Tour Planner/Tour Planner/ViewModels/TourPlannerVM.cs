@@ -1,22 +1,13 @@
-﻿using Microsoft.Extensions.Configuration;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Tour_Planner.Models;
 using Tour_Planner.BL;
 using log4net;
-using Tour_Planner.DAL;
 using System.Windows;
-using Tour_Planner.BL.GeoLocationAPI;
-using iTextSharp.text.pdf.codec;
-using System.Windows.Media.Imaging;
-using static Tour_Planner.BL.GeoLocationAPI.CalculatedRouteResponse;
 using System.IO;
 using System.Text;
-using Microsoft.Web.WebView2.WinForms;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Tour_Planner.ViewModels
 {
@@ -42,6 +33,7 @@ namespace Tour_Planner.ViewModels
             ImportTourDataCommand = new RelayCommand(filePath => ImportTourData(filePath));
 
             ClearValuesCommand = new RelayCommand(o => ClearTourFields());
+            ExportDataAsCSVCommand = new RelayCommand(o => { ExportAsCSV(); ShowPopup("Export as CSV"); });
 
             _tourService = tourService;
             _routeService = new RouteService();
@@ -156,6 +148,7 @@ namespace Tour_Planner.ViewModels
         public ICommand SaveTourLogCommand { get; set; }
 
         public ICommand ClearValuesCommand { get; set; }
+        public ICommand ExportDataAsCSVCommand { get; set; }
 
         public void TourReport()
         {
@@ -228,6 +221,20 @@ namespace Tour_Planner.ViewModels
                 }
             }     
         }
+        public void ExportAsCSV()
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine("Name;Description;From;To;Distance;EstimatedTime;Popularity;ChildFriendliness");
+
+            foreach (var tour in Tours)
+            {
+                sb.AppendLine($"{tour.Name};{tour.Description};{tour.From};{tour.To};{tour.Distance};{tour.EstimatedTime};{tour.Popularity};{tour.ChildFriendliness}");
+            }
+
+            string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "TourData.csv");
+            File.WriteAllText(filePath, sb.ToString());
+        }
+
         public void AddTour()
         {
             if (ValidateTourInput())
