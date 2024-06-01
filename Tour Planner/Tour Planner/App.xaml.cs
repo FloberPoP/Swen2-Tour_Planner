@@ -11,7 +11,7 @@ using Tour_Planner.BL;
 using Tour_Planner.Models;
 using Tour_Planner.DAL;
 
-namespace Tour_Planner
+namespace Tour_Planner.DAL
 {
     public partial class App : Application
     {

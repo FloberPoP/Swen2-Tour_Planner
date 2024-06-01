@@ -23,12 +23,13 @@ namespace Tour_Planner
             Log.Info("Application starting...");
 
             InitializeComponent();
-            InitializeAsync();
             _tourService = tourService;
             DataContext = new TourPlannerVM(_tourService);
+
+            ((TourPlannerVM)DataContext).RefreshMap = UpdateMapWebView;
         }
 
-        protected async void InitializeAsync()
+        protected async Task UpdateMapWebView()
         {
             await webView.EnsureCoreWebView2Async(null);
             // Assuming "example.html" is at the root of your project directory and set to "Copy to Output Directory"
@@ -45,10 +46,6 @@ namespace Tour_Planner
                 Log.Info($"Tour selected: {selectedTour.Name}");
                 (DataContext as TourPlannerVM).SelectedTour = selectedTour;
             }
-        }
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-
         }
 
         private void ImportFileButton_Click(object sender, RoutedEventArgs e)
@@ -72,11 +69,6 @@ namespace Tour_Planner
         private void HamburgerMenu_Unchecked(object sender, RoutedEventArgs e)
         {
             menuItemsPanel.Visibility = Visibility.Collapsed;
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            InitializeAsync();
         }
     }
 }

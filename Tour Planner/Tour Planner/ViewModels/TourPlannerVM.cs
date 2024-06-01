@@ -8,6 +8,7 @@ using log4net;
 using System.Windows;
 using System.IO;
 using System.Text;
+using Tour_Planner.DAL;
 
 namespace Tour_Planner.ViewModels
 {
@@ -41,6 +42,9 @@ namespace Tour_Planner.ViewModels
             NewDateTime = DateTime.Now;
             LoadTours();
         }
+
+        public delegate Task RefreshMapDelegate();
+        public RefreshMapDelegate RefreshMap { get; set; }
 
         private void ShowPopup(string message)
         {
@@ -96,6 +100,8 @@ namespace Tour_Planner.ViewModels
 
                     //ImageUrl = await ConstructMapUrl(SelectedTour.From, SelectedTour.To);
                     //SelectedTour.Img = ImageUrl;
+
+                    RefreshMap();
                 }
 
                 else
@@ -369,7 +375,9 @@ namespace Tour_Planner.ViewModels
                 tour.Name.ToLower().Contains(searchText) ||
                 tour.Description.ToLower().Contains(searchText) ||
                 tour.From.ToLower().Contains(searchText) ||
-                tour.To.ToLower().Contains(searchText)
+                tour.To.ToLower().Contains(searchText) ||
+                tour.ChildFriendliness.ToLower().Contains(searchText)
+
             ));
         }
 
