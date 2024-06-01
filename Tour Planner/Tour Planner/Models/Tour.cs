@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Xml.Serialization;
 
 namespace Tour_Planner.Models
 {
@@ -22,6 +23,7 @@ namespace Tour_Planner.Models
             tourLogs.CollectionChanged += (s, e) => UpdateComputedProperties();
         }
 
+      
         public ObservableCollection<TourLog> TourLogs
         {
             get { return tourLogs; }

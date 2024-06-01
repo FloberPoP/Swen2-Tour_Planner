@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.CompilerServices;
+using System.Xml.Serialization;
 
 namespace Tour_Planner.Models
 {
@@ -14,15 +15,16 @@ namespace Tour_Planner.Models
 
     public class TourLog : INotifyPropertyChanged
     {
+        [XmlIgnore]
         public Tour Tour { get; set; }
 
         private DateTime dateTime;
 
         public DateTime DateTime
         {
-            get 
+            get
             {
-                return dateTime.ToLocalTime(); 
+                return dateTime.ToLocalTime();
             }
             set
             {
