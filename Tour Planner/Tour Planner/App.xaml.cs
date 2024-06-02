@@ -3,13 +3,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
 using System.IO;
-using System.Linq;
 using System.Windows;
 using Tour_Planner.BL;
 using Tour_Planner.Models;
-using Tour_Planner.DAL;
 
 namespace Tour_Planner.DAL
 {
@@ -72,7 +69,7 @@ namespace Tour_Planner.DAL
         {
             if (!context.Tours.Any())
             {
-                context.Tours.Add(new Tour
+                Tour t1 = new Tour
                 {
                     Name = "Mittagspause",
                     Description = "Tour von da HTL zum Mci",
@@ -82,7 +79,9 @@ namespace Tour_Planner.DAL
                     Distance = 0,
                     EstimatedTime = 0,
                     Img = "tour1.jpg"
-                });
+                };
+
+                context.Tours.Add(t1);
 
                 context.Tours.Add(new Tour
                 {
@@ -130,6 +129,17 @@ namespace Tour_Planner.DAL
                     Distance = 0,
                     EstimatedTime = 0,
                     Img = "tour2.jpg"
+                });
+
+                context.TourLogs.Add(new TourLog
+                {
+                    Tour = t1,
+                    DateTime = DateTime.Now,
+                    Comment = "Machen lieber nicht nochmal",
+                    Difficulty = DifficultyLevel.Hard,
+                    TotalDistance = "5000",
+                    TotalTime = "3600",
+                    Rating = 3
                 });
 
                 context.SaveChanges();

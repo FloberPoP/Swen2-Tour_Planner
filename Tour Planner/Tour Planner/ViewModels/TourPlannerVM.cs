@@ -9,7 +9,6 @@ using System.Windows;
 using System.IO;
 using System.Text;
 using Tour_Planner.DAL;
-using static ExportImportService;
 
 namespace Tour_Planner.ViewModels
 {
@@ -46,7 +45,7 @@ namespace Tour_Planner.ViewModels
 
         public delegate Task RefreshMapDelegate();
         public RefreshMapDelegate RefreshMap { get; set; }
-
+        
         private void ShowPopup(string message)
         {
             MessageBox.Show(message, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -73,10 +72,8 @@ namespace Tour_Planner.ViewModels
                 var (responseBody, routeResponse) = await _routeService.GetRoute(SelectedTour.From, SelectedTour.To, SelectedTour.TransportType);
 
                 string filePath = "Resources/directions.js";
-
                 string newJsonDirection = "var directions = " + responseBody.ToString();
 
-                // Override the directions.js-File
                 try
                 {
                     await File.WriteAllTextAsync(filePath, newJsonDirection, Encoding.UTF8);
@@ -93,14 +90,8 @@ namespace Tour_Planner.ViewModels
                     var coordinates = firstFeature.Geometry.Coordinates;
                     var summary = firstFeature.Properties.Summary;
 
-                    //string message = $"Distance: {summary.Distance} meters\nDuration: {summary.Duration} seconds";
-                    //MessageBox.Show(message);
-
                     NewTourDistance = (int)summary.Distance;
                     NewTourEstTime = (int)summary.Duration;
-
-                    //ImageUrl = await ConstructMapUrl(SelectedTour.From, SelectedTour.To);
-                    //SelectedTour.Img = ImageUrl;
 
                     RefreshMap();
                 }
@@ -112,34 +103,6 @@ namespace Tour_Planner.ViewModels
                 }
             }
         }
-
-        /* Map?
-        // Construct the map with the Long-Lat-Coords
-        // Basically only needed for Single-Report-Generation ("Image")
-        private async Task<string> ConstructMapUrl(string address1, string address2)
-        {
-            var startCoordinates = await _routeService.GetCoordinates(address1);
-            var endCoordinates = await _routeService.GetCoordinates(address2);
-
-            string baseUrl = "https://tile.openstreetmap.org/{0}/{1}/{2}.png";
-            int zoomLevel = 14;
-
-            // Calculate the center coordinates between the start and end points
-            double centerLat = (startCoordinates.Latitude + endCoordinates.Latitude) / 2;
-            double centerLon = (startCoordinates.Longitude + endCoordinates.Longitude) / 2;
-
-            // Calculate the tile coordinates for the center
-            int xTile = (int)((centerLon + 180) / 360 * (1 << zoomLevel));
-            int yTile = (int)((1 - Math.Log(Math.Tan(centerLat * Math.PI / 180) + 1 / Math.Cos(centerLat * Math.PI / 180)) / Math.PI) / 2 * (1 << zoomLevel));
-
-            string mapUrl = string.Format(baseUrl, zoomLevel, xTile, yTile);
-
-            Console.WriteLine($"Center Tile Coordinates: xTile={xTile}, yTile={yTile}");
-            Console.WriteLine($"Map URL: {mapUrl}");
-
-            return mapUrl;
-        }
-        */
 
         public ICommand TourReportCommand { get; set; }
         public ICommand SummarizedTourReportCommand { get; set; }
@@ -234,7 +197,6 @@ namespace Tour_Planner.ViewModels
                 }
             }     
         }
-
         public void ExportAllTours(ExportFormat format)
         {
             switch (format)
@@ -266,7 +228,7 @@ namespace Tour_Planner.ViewModels
                     TransportType = NewTourTransType,
                     Distance = NewTourDistance,
                     EstimatedTime = NewTourEstTime,
-                    Img = "Placeholder" //Img should be stored in Filesystem
+                    Img = "Placeholder"
                 };
 
                 Log.Info($"Tour Added: {newTour.Name}");
@@ -287,10 +249,11 @@ namespace Tour_Planner.ViewModels
                 SelectedTour.TransportType = NewTourTransType;
                 SelectedTour.Distance = NewTourDistance;
                 SelectedTour.EstimatedTime = NewTourEstTime;
-                SelectedTour.Img = "Placeholder"; //Img should be stored in Filesystem
+                SelectedTour.Img = "Placeholder"
 
                 Log.Info($"Tour Updated: {SelectedTour.Name}");
                 _tourService.UpdateTour(SelectedTour);
+
                 FilteredTours = new ObservableCollection<Tour>(Tours);
             }
         }

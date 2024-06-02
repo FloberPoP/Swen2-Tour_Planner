@@ -36,7 +36,7 @@
                                 <ColumnDefinition Width="4*"/>
                             </Grid.ColumnDefinitions>
 
-                            <!-- Navigation bar -->
+                            <!-- Navbar -->
                             <TextBlock Grid.Column="0" FontSize="25" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center">Menu</TextBlock>
                             <TextBlock Grid.Column="1" FontSize="25" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center">Tours</TextBlock>
                             <TextBlock Grid.Column="2" FontSize="25" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center">Tour Details</TextBlock>
@@ -137,13 +137,11 @@
 
                     </Grid>
 
-                    <!-- Google Maps ding -->
+                    <!-- Maps -->
                     <!--<Image Source="{Binding MapImageUrl}" Grid.Row="2" Grid.Column="2" Stretch="Uniform" /> -->
                     <Grid Grid.Row="1" Grid.Column="2" Grid.RowSpan="2">
                         <wpf:WebView2 x:Name="webView"/>
                     </Grid>
-
-                    <!-- All Tour Logs -->
 
                     <Border Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Background="#333333">
                         <Grid>
@@ -151,7 +149,7 @@
                         </Grid>
                     </Border>
 
-                    <!-- DataGrid for Tour Logs -->
+                    <!-- Tour Logs -->
                     <DataGrid x:Name="tourLogsDataGrid" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" AutoGenerateColumns="False" ItemsSource="{Binding SelectedTour.TourLogs}">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="0.5*" />

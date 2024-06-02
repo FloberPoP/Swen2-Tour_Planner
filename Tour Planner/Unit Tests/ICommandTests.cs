@@ -1,15 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Tour_Planner.BL;
 using Tour_Planner.DAL;
 using Tour_Planner.Models;
 using Tour_Planner.ViewModels;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace UnitTests
 {
@@ -48,7 +41,7 @@ namespace UnitTests
         }
 
         [TestMethod]
-        public void AddTourCommand_CanExecute_WhenValidInput_ReturnsTrue()
+        public void AddTourCommand_CanExecute()
         {
             _tourPlannerVM.NewTourName = "Test";
             _tourPlannerVM.NewTourDescr = "Test Description";
@@ -64,7 +57,7 @@ namespace UnitTests
         }
 
         [TestMethod]
-        public void AddTourCommand_Execute_AddsNewTour()
+        public void AddTourCommand_Execute()
         {
             int initialCount = _tourPlannerVM.Tours.Count;
 
@@ -83,7 +76,7 @@ namespace UnitTests
         }
 
         [TestMethod]
-        public void UpdateTourCommand_CanExecute_WhenTourSelected_ReturnsTrue()
+        public void UpdateTourCommand_CanExecute()
         {
             if (_tourPlannerVM.Tours.Any())
             {
@@ -96,7 +89,7 @@ namespace UnitTests
         }
 
         [TestMethod]
-        public void UpdateTourCommand_Execute_UpdatesSelectedTour()
+        public void UpdateTourCommand_Execute()
         {
             _tourPlannerVM.Tours.Add(new Tour
             {
@@ -121,7 +114,7 @@ namespace UnitTests
         }
 
         [TestMethod]
-        public void DeleteTourCommand_CanExecute_WhenTourSelected_ReturnsTrue()
+        public void DeleteTourCommand_CanExecute()
         {
             if (_tourPlannerVM.Tours.Any())
             {
@@ -134,7 +127,7 @@ namespace UnitTests
         }
 
         [TestMethod]
-        public void DeleteTourCommand_Execute_RemovesSelectedTour()
+        public void DeleteTourCommand_Execute()
         {
             _tourPlannerVM.Tours.Add(new Tour
             {
@@ -159,7 +152,7 @@ namespace UnitTests
         }
 
         [TestMethod]
-        public void AddTourLogCommand_CanExecute_WhenTourSelected_ReturnsTrue()
+        public void AddTourLogCommand_CanExecute()
         {
             _tourPlannerVM.Tours.Add(new Tour
             {
@@ -184,7 +177,7 @@ namespace UnitTests
         }
 
         [TestMethod]
-        public void AddTourLogCommand_Execute_AddsNewTourLog()
+        public void AddTourLogCommand_Execute()
         {
             var test = new Tour
             {
@@ -224,7 +217,7 @@ namespace UnitTests
         }
 
         [TestMethod]
-        public void DeleteTourLogCommand_CanExecute_WhenTourLogSelected_ReturnsTrue()
+        public void DeleteTourLogCommand_CanExecute()
         {
             if (_tourPlannerVM.SelectedTour != null && _tourPlannerVM.SelectedTour.TourLogs.Any())
             {
@@ -237,7 +230,7 @@ namespace UnitTests
         }
 
         [TestMethod]
-        public void DeleteTourLogCommand_Execute_RemovesSelectedTourLog()
+        public void DeleteTourLogCommand_Execute()
         {
             var test = new Tour
             {
@@ -280,7 +273,7 @@ namespace UnitTests
         }
 
         [TestMethod]
-        public void SaveTourLogCommand_CanExecute_WhenTourLogSelected_ReturnsTrue()
+        public void SaveTourLogCommand_CanExecute()
         {
             var test = new Tour
             {
@@ -309,22 +302,18 @@ namespace UnitTests
 
             test.TourLogs.Add(newTourLog);
 
-            // Check if there is a selected tour and if it has any logs
             if (_tourPlannerVM.SelectedTour != null && _tourPlannerVM.SelectedTour.TourLogs.Any())
             {
-                // Set the selected tour log to the first log in the list
                 _tourPlannerVM.SelectedTourLog = _tourPlannerVM.SelectedTour.TourLogs.First();
             }
 
-            // Check if the SaveTourLogCommand can be executed
             bool canExecute = _tourPlannerVM.SaveTourLogCommand.CanExecute(null);
 
-            // Assert that the command can be executed
             Assert.IsTrue(canExecute);
         }
 
         [TestMethod]
-        public void SaveTourLogCommand_Execute_UpdatesSelectedTourLog()
+        public void SaveTourLogCommand_Execute()
         {
             var test = new Tour
             {

@@ -3,8 +3,6 @@ using Tour_Planner.BL;
 using Tour_Planner.DAL;
 using Tour_Planner.Models;
 using Tour_Planner.ViewModels;
-using static Microsoft.AspNetCore.Hosting.Internal.HostingApplication;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace UnitTests
 {

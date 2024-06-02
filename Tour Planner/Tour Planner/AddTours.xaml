@@ -62,8 +62,6 @@
 
             <Label HorizontalAlignment="Center" Grid.Row="6" Grid.Column="0" Foreground="White">Estimated Time:</Label>
             <TextBox IsEnabled="False" Grid.Row="6" Grid.Column="1" Text="{Binding NewTourEstTime}"/>
-
-            <!-- Route information (IMG) -->
         </Grid>
 
         <Grid Grid.Row="2">

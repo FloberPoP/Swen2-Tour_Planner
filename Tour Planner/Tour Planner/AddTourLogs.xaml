@@ -75,7 +75,6 @@
             <Button Content="Add TourLog" Command="{Binding AddTourLogCommand}" Grid.Column="0"/>
             <Button Content="Update TourLog" Command="{Binding SaveTourLogCommand}"  Grid.Column="1"/>
             <Button Content="Delete TourLog" Command="{Binding DeleteTourLogCommand}"  Grid.Column="2"/>
-        </Grid>
-        
+        </Grid>        
     </Grid>
 </UserControl>
